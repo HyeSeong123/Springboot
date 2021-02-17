@@ -8,6 +8,7 @@ import com.sbs.example.lolHi.dto.Article;
 
 @Mapper
 public interface ArticleDao {
-	List<Article> getArticles();
+
+	List<Article> getArticle();
 
 }
