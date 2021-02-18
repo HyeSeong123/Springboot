@@ -8,15 +8,12 @@
 <title>게시물 리스트</title>
 </head>
 <body>
-	<h1>게시물 상세화면</h1>
+	<h1>게시물 수정</h1>
 		<a href="./list">목록</a>
 		
 		<div> 게시물 번호 : ${article.num}</div>
-		
-		<h1>수정 목록</h1>
-		
 
-		<form action="doModify?num=${article.num}&title=${article.title}&body=${article.body}" method="POST">
+		<form action="doModify" method="POST">
 			<input type="hidden" name="num" value="${article.num}"/>
 			
 			<input type="text" name="title" value="${article.title}"/>

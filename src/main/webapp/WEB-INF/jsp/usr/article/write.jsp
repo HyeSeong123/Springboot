@@ -11,7 +11,7 @@
 	<h1>게시물 작성화면</h1>
 		<a href="./list">목록</a>
 		
-		<form action="doWrite">
+		<form action="doWrite" method="POST">
 		
 			<div>
 				제목 : <input type="text" maxlength="30" name="title" />
