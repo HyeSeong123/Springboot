@@ -6,9 +6,9 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class Article {
-	private int num;
-	private String regDate;
-	private String updateDate;
-	private String title;
-	private String body;
+	public int num;
+	public String regDate;
+	public String updateDate;
+	public String title;
+	public String body;
 }

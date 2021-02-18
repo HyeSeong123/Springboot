@@ -1,4 +1,4 @@
-package com.sbs.example.lolHi.service;
+package com.sbs.example.lolHi.Service;
 
 import java.util.List;
 
@@ -12,8 +12,13 @@ import com.sbs.example.lolHi.dto.Article;
 public class ArticleService {
 	@Autowired
 	private ArticleDao articleDao;
-	public List<Article> getArticle() {
-		return articleDao.getArticle();
+	
+	public List<Article> getArticles() {
+		return articleDao.getArticles();
+	}
+
+	public Article getArticleByNum(int num) {
+		return articleDao.getArticleByNum(num);
 	}
 
 }
