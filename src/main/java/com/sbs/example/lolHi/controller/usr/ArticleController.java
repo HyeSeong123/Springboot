@@ -48,7 +48,7 @@ public class ArticleController {
 	@RequestMapping("/usr/article/modify")
 	public String showModify(Model model, int num) {
 		
-		Article article = articleService.showModifyArticleByNum(num);
+		Article article = articleService.getArticleByNum(num);
 		
 		model.addAttribute("article", article);
 		
@@ -62,6 +62,12 @@ public class ArticleController {
 		articleService.doModifyArticleByNum(num, title, body);
 		
 		return String.format("<script> alert('%d번 글을 수정하였습니다'); location.replace('/usr/article/detail?num=%d'); </script>", num, num);
+	}
+	
+	@RequestMapping("/usr/article/write")
+	public String showWrite() {
+		
+		return String.format("usr/article/write");
 	}
 	
 	@RequestMapping("/usr/article/doWrite")

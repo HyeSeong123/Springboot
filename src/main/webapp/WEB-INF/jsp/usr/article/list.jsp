@@ -9,7 +9,8 @@
 </head>
 <body>
 	<h1>게시물 리스트</h1>
-		
+		<a href="./write">글 작성</a>
+		<hr></hr>
 	<c:forEach items="${articles}" var="article">
 		<span> 게시물 번호 : ${article.num}</span>
 		<span> 게시물 작성일 : ${article.regDate}</span>

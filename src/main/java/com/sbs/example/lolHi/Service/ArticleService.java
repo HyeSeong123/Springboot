@@ -33,10 +33,6 @@ public class ArticleService {
 		
 	}
 
-	public Article showModifyArticleByNum(int num) {
-		return articleDao.showModifyArticleByNum(num);
-	}
-
 	public int doWriteArticleByNum(Map<String, Object> param) {
 		articleDao.doWriteArticleByNum(param);
 		

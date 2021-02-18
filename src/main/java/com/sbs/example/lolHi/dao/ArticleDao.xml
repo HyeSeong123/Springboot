@@ -19,12 +19,6 @@
 		WHERE num = #{num}
 	</delete>
 
-	<select id="showModifyArticleByNum" resultType="Article">
-		SELECT A.*
-		FROM article AS A
-		WHERE num = #{num}
-	</select>
-
 	<update id="doModifyArticleByNum">
 		UPDATE article
 

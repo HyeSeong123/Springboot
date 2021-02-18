@@ -5,7 +5,9 @@ import java.math.BigInteger;
 public class Util {
 
 	public static int getAsInt(Object value, int defaultValue) {
-		if (value instanceof Long) {
+		if (value instanceof BigInteger) {
+			return ((BigInteger) value).intValue();
+		} else if (value instanceof Long) {
 			return Long.valueOf((long) value).intValue();
 		} else if (value instanceof Integer) {
 			return (int) value;

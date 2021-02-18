@@ -19,8 +19,6 @@ public interface ArticleDao {
 
 	void doModifyArticleByNum(@Param("num") int num, @Param("title") String title, @Param("body") String body);
 
-	Article showModifyArticleByNum(@Param("num") int num);
-
 	void doWriteArticleByNum(Map<String, Object> param);
 
 }
