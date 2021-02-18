@@ -38,7 +38,7 @@
 			<a class="${className}" href="list?page=${i}">${i}</a>
 			
 		</c:forEach>
-		
+
 		<c:if test="${totalPage > 1 && page+10 < totalPage}">
 			<a href="">▶▶</a>
 		</c:if>
