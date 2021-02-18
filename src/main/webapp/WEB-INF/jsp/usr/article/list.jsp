@@ -9,12 +9,13 @@
 </head>
 <body>
 	<h1>게시물 리스트</h1>
-	
+		
 	<c:forEach items="${articles}" var="article">
 		<span> 게시물 번호 : ${article.num}</span>
 		<span> 게시물 작성일 : ${article.regDate}</span>
 		<span> 게시물 수정일 : ${article.updateDate}</span>
 		<a href="./detail?num=${article.num}"> 게시물 제목 : ${article.title}</a>
+		<hr />
 	</c:forEach>
 	
 </body>
