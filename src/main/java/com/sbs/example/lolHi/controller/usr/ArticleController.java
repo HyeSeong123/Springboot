@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sbs.example.lolHi.Service.ArticleService;
 import com.sbs.example.lolHi.dto.Article;
+import com.sbs.example.lolHi.util.Util;
 
 @Controller
 public class ArticleController {
@@ -21,8 +22,31 @@ public class ArticleController {
 	@RequestMapping("/usr/article/list")
 	public String showList(Model model, @RequestParam Map<String, Object> param) {
 		List<Article> articles = articleService.getArticles(param);
+		int totalCount = articleService.totalCount();
+		int itemsCountInAPage = 20;
+		int page = Util.getAsInt(param.get("page"), 1);
+		int totalPage = (int) Math.ceil(totalCount/ (double)itemsCountInAPage);
+		int pageMenuArmSize = 10;
+		int pageMenuStart = page -  pageMenuArmSize;
+		if(pageMenuStart < 1) {
+			pageMenuStart = 1;
+		}
+		int pageMenuEnd = page + pageMenuArmSize;
 		
+		if(pageMenuEnd > totalPage) {
+			pageMenuEnd = totalPage;
+		}
+		
+		param.put("itemsCountInAPage", itemsCountInAPage);
+		
+		model.addAttribute("totalCount", totalCount);
+		model.addAttribute("page", page);
+		model.addAttribute("totalPage", totalPage);
+		model.addAttribute("pageMenuStart", pageMenuStart);
+		model.addAttribute("pageMenuEnd", pageMenuEnd);
 		model.addAttribute("articles", articles);
+		
+		
 		
 		return "usr/article/list";
 	}

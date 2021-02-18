@@ -15,22 +15,22 @@ import com.sbs.example.lolHi.util.Util;
 public class ArticleService {
 	@Autowired
 	private ArticleDao articleDao;
-	
+
 	public List<Article> getArticles(Map<String, Object> param) {
-		int page = Util.getAsInt(param.get("page"),0);
-		
-		if(page < 0 || page == 0) {
+		int page = Util.getAsInt(param.get("page"), 0);
+
+		if (page < 0 || page == 0) {
 			page = 1;
 		}
-		
+
 		int itemsInAPage = 20;
-		
-		int limitFrom = (page -1) * itemsInAPage;
+
+		int limitFrom = (page - 1) * itemsInAPage;
 		int limitTake = itemsInAPage;
-		
+
 		param.put("limitFrom", limitFrom);
 		param.put("limitTake", limitTake);
-		
+
 		return articleDao.getArticles(param);
 	}
 
@@ -44,15 +44,19 @@ public class ArticleService {
 
 	public void doModifyArticleByNum(int num, String title, String body) {
 		articleDao.doModifyArticleByNum(num, title, body);
-		
+
 	}
 
 	public int doWriteArticleByNum(Map<String, Object> param) {
 		articleDao.doWriteArticleByNum(param);
-		
+
 		int num = Util.getAsInt(param.get("num"), 0);
-		
+
 		return num;
+	}
+
+	public int totalCount() {
+		return articleDao.totalCount();
 	}
 
 }
