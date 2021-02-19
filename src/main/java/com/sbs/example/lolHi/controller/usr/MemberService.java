@@ -23,13 +23,17 @@ public class MemberService {
 	}
 
 	public boolean isJoinAvailableLoginId(String loginId) {
-		Member member = memberDao.getMemberByLoginId(loginId);
+		Member member = getMemberByLoginId(loginId);
 
 		if (member == null) {
 			return true;
 		}
 
 		return false;
+	}
+
+	public Member getMemberByLoginId(String loginId) {
+		return memberDao.getMemberByLoginId(loginId);
 	}
 
 }

@@ -1,17 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>게시물 리스트</title>
-</head>
-<body>
+<c:set var="title" value="게시물 리스트" />
+
+
+<%@ include file="../part/header.jspf"%>
 	<h1>게시물 리스트</h1>
 	<h3>게시물 수 : ${totalCount}</h3>
 	<a href="./write">글 작성</a>
 	<a href="../member/join">회원 가입</a>
+	<a href="../member/login">로그인</a>
 	<hr></hr>
 	<c:forEach items="${articles}" var="article">
 		<span> 게시물 번호 : ${article.num}</span>
@@ -56,5 +54,4 @@
 		</c:if>
 
 	</div>
-</body>
-</html>
+<%@ include file="../part/footer.jspf"%>

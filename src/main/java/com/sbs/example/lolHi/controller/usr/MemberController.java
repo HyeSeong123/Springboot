@@ -32,8 +32,6 @@ public class MemberController {
 		
 		boolean isJoinAvailableLoginId = memberService.isJoinAvailableLoginId(loginId);
 		
-		System.out.println("isJoinAvailableLoginId= " + isJoinAvailableLoginId);
-		
 		if(isJoinAvailableLoginId == false) {
 			return String.format("<script> alert('%s(은)는 이미 사용중인 아이디 입니다.'); history.back(); </script>", loginId); 
 		}
@@ -42,5 +40,37 @@ public class MemberController {
 
 		return String.format("<script> alert('%d번 님의 회원가입을 환영합니다'); location.replace('/usr/article/list'); </script>",
 				num);
+	}
+	
+	@RequestMapping("/usr/member/login")
+	public String showLogin() {
+		return "usr/member/login";
+	}
+	
+	@RequestMapping("/usr/member/doLogin")
+	@ResponseBody
+	public String doLogin(@RequestParam Map<String, Object> param) {
+		String loginId = Util.getAsStr(param.get("loginId"), "");
+		String loginPw = Util.getAsStr(param.get("loginPw"), "");
+		
+		if(loginId.length() == 0) {
+			return String.format("<script> alert('로그인 아이디를 입력해주세요'); history.back(); </script>");
+		}
+		
+		if(loginPw.length() == 0) {
+			return String.format("<script> alert('로그인 패스워드를 입력해주세요'); history.back(); </script>");
+		}
+		
+		Member member = memberService.getMemberByLoginId(loginId);
+		
+		if(member == null) {
+			return String.format("<script> alert('존재하지 않는 아이디 입니다.'); history.back(); </script>");
+		}
+		
+		if(member.getLoginPw().equals(loginPw) == false) {
+			return String.format("<script> alert('아이디와 패스워드가 일치하지 않습니다.'); history.back(); </script>");
+		}
+		return String.format("<script> alert('%s 님의 로그인을 환영합니다'); location.replace('/usr/article/list'); </script>",
+				loginId);
 	}
 }
