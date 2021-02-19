@@ -26,7 +26,10 @@ public class Util {
 	}
 
 	public static String getAsStr(Object object, String defaultValue) {
-
+		if(object == null) {
+			return defaultValue;
+		}
+		
 		if (object instanceof String) {
 			return (String) (object);
 		}

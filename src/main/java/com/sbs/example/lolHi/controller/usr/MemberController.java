@@ -2,6 +2,8 @@ package com.sbs.example.lolHi.controller.usr;
 
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -49,10 +51,7 @@ public class MemberController {
 	
 	@RequestMapping("/usr/member/doLogin")
 	@ResponseBody
-	public String doLogin(@RequestParam Map<String, Object> param) {
-		String loginId = Util.getAsStr(param.get("loginId"), "");
-		String loginPw = Util.getAsStr(param.get("loginPw"), "");
-		
+	public String doLogin(String loginId, String loginPw, HttpSession session) {
 		if(loginId.length() == 0) {
 			return String.format("<script> alert('로그인 아이디를 입력해주세요'); history.back(); </script>");
 		}
@@ -70,7 +69,17 @@ public class MemberController {
 		if(member.getLoginPw().equals(loginPw) == false) {
 			return String.format("<script> alert('아이디와 패스워드가 일치하지 않습니다.'); history.back(); </script>");
 		}
+		
+		session.setAttribute("loginedMemberNum", member.getNum());
+		
 		return String.format("<script> alert('%s 님의 로그인을 환영합니다'); location.replace('/usr/article/list'); </script>",
 				loginId);
+	}
+	@RequestMapping("/usr/member/doLogout")
+	@ResponseBody
+	public String doLogout(HttpSession session) {
+		session.setAttribute("loginedMemberNum", 0);
+		
+		return String.format("<script> alert('로그아웃 되었습니다.'); location.replace('/usr/article/list'); </script>");
 	}
 }

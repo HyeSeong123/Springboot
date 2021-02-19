@@ -8,8 +8,14 @@
 	<h1>게시물 리스트</h1>
 	<h3>게시물 수 : ${totalCount}</h3>
 	<a href="./write">글 작성</a>
-	<a href="../member/join">회원 가입</a>
-	<a href="../member/login">로그인</a>
+	<c:if test="${sessionScope.loginedMemberNum == 0}">
+		<a href="../member/join">회원 가입</a>
+		<a href="../member/login">로그인</a>
+	</c:if>
+	
+	<c:if test="${sessionScope.loginedMemberNum > 0}">
+		<a href="../member/doLogout">로그아웃</a>
+	</c:if>
 	<hr></hr>
 	<c:forEach items="${articles}" var="article">
 		<span> 게시물 번호 : ${article.num}</span>
