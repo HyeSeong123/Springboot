@@ -5,10 +5,13 @@
 
 
 <%@ include file="../part/header.jspf"%>
+	
+	[${sessionScope.loginedMemberNum}]
+	
 	<h1>게시물 리스트</h1>
 	<h3>게시물 수 : ${totalCount}</h3>
 	<a href="./write">글 작성</a>
-	<c:if test="${sessionScope.loginedMemberNum == 0}">
+	<c:if test="${sessionScope.loginedMemberNum == 0 || sessionScope.loginedMemberNum == null}">
 		<a href="../member/join">회원 가입</a>
 		<a href="../member/login">로그인</a>
 	</c:if>

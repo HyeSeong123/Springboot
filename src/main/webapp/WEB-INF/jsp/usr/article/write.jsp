@@ -22,6 +22,5 @@
 				제출 <input type="submit" value="작성"/>
 			</div>
 		</form>
-		<div> 게시물 번호 : ${article.num}</div>
 		
 <%@ include file="../part/footer.jspf"%>
