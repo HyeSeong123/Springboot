@@ -28,6 +28,7 @@ public class ArticleController {
 		int totalPage = (int) Math.ceil(totalCount/ (double)itemsCountInAPage);
 		int pageMenuArmSize = 10;
 		int pageMenuStart = page -  pageMenuArmSize;
+
 		if(pageMenuStart < 1) {
 			pageMenuStart = 1;
 		}
