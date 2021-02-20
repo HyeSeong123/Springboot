@@ -7,3 +7,7 @@
 <title>${title}</title>
 </head>
 <body>
+
+	[${sessionScope.loginedMemberNum}]
+	[${article.memberNum}]
+	[${article.num}]
