@@ -16,4 +16,16 @@
 		<div> 게시물 제목 : ${article.title}</div>
 		<div> 게시물 내용 : ${article.body}</div>
 
+		<h2>댓글</h2>
+		<form action="/usr/reply/doWrite">
+			<input type="hidden" name="relId" value="${article.num}"/>
+			<input type="hidden" name="relCode" value="${article.num}"/>
+			<div>
+				<textarea name="body" rows="10"></textarea>
+			</div>
+			
+			<div>
+				<input type="submit" value="작성"/>
+			</div>
+		</form>
 <%@ include file="../part/footer.jspf"%>

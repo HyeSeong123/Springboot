@@ -100,10 +100,10 @@ CREATE TABLE `member`(
     updateDate DATETIME NOT NULL,
     `name` CHAR(50) NOT NULL,
     `nickname` CHAR(50) NOT NULL,
-    `email` varchar(100) not null,
+    `email` VARCHAR(100) NOT NULL,
     loginId CHAR(50) NOT NULL,
-    loginPw varchar(200) not null,
-    adminLevel tinyint(1) unsigned not null default 2 COMMENT '0=탈퇴/1=로그인정지/2=일반/3=인증된,4=관리자'    
+    loginPw VARCHAR(200) NOT NULL,
+    adminLevel TINYINT(1) UNSIGNED NOT NULL DEFAULT 2 COMMENT '0=탈퇴/1=로그인정지/2=일반/3=인증된,4=관리자'    
 );
 
 INSERT INTO `member`
@@ -163,18 +163,18 @@ USE `lolHi`;
 DROP TABLE IF EXISTS `article`;
 
 CREATE TABLE `article` (
-  `num` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `regDate` datetime NOT NULL,
-  `updateDate` datetime NOT NULL,
-  `memberNum` int(10) unsigned NOT NULL,
-  `title` char(200) NOT NULL,
-  `body` longtext NOT NULL,
+  `num` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `regDate` DATETIME NOT NULL,
+  `updateDate` DATETIME NOT NULL,
+  `memberNum` INT(10) UNSIGNED NOT NULL,
+  `title` CHAR(200) NOT NULL,
+  `body` LONGTEXT NOT NULL,
   PRIMARY KEY (`num`)
-) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb4;
+) ENGINE=INNODB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `article` */
 
-insert  into `article`(`num`,`regDate`,`updateDate`,`memberNum`,`title`,`body`) values 
+INSERT  INTO `article`(`num`,`regDate`,`updateDate`,`memberNum`,`title`,`body`) VALUES 
 (1,'2021-02-16 19:15:28','2021-02-16 19:15:28',1,'제목1','내용1'),
 (2,'2021-02-18 11:08:46','2021-02-18 15:02:20',1,'123213','223'),
 (3,'2021-02-18 10:22:37','2021-02-18 10:22:41',1,'제목3','제목3'),
@@ -209,21 +209,21 @@ insert  into `article`(`num`,`regDate`,`updateDate`,`memberNum`,`title`,`body`) 
 DROP TABLE IF EXISTS `member`;
 
 CREATE TABLE `member` (
-  `num` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `regDate` datetime NOT NULL,
-  `updateDate` datetime NOT NULL,
-  `name` char(50) NOT NULL,
-  `nickname` char(50) NOT NULL,
-  `email` varchar(100) NOT NULL,
-  `loginId` char(50) NOT NULL,
-  `loginPw` varchar(200) NOT NULL,
-  `adminLevel` tinyint(1) unsigned NOT NULL DEFAULT 2 COMMENT '0=탈퇴/1=로그인정지/2=일반/3=인증된,4=관리자',
+  `num` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `regDate` DATETIME NOT NULL,
+  `updateDate` DATETIME NOT NULL,
+  `name` CHAR(50) NOT NULL,
+  `nickname` CHAR(50) NOT NULL,
+  `email` VARCHAR(100) NOT NULL,
+  `loginId` CHAR(50) NOT NULL,
+  `loginPw` VARCHAR(200) NOT NULL,
+  `adminLevel` TINYINT(1) UNSIGNED NOT NULL DEFAULT 2 COMMENT '0=탈퇴/1=로그인정지/2=일반/3=인증된,4=관리자',
   PRIMARY KEY (`num`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
+) ENGINE=INNODB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `member` */
 
-insert  into `member`(`num`,`regDate`,`updateDate`,`name`,`nickname`,`email`,`loginId`,`loginPw`,`adminLevel`) values 
+INSERT  INTO `member`(`num`,`regDate`,`updateDate`,`name`,`nickname`,`email`,`loginId`,`loginPw`,`adminLevel`) VALUES 
 (1,'2021-02-19 22:35:19','2021-02-19 22:35:19','방혜성','banggu1997','banggu1997@gmail.com','test','1111',2),
 (2,'2021-02-20 13:14:12','2021-02-20 13:14:12','방방','방혜성','bmg4211@naver.com','baobab612','1111',2);
 

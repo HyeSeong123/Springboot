@@ -9,7 +9,9 @@
 <body>
 	
 	<div>
-		${loginedMember.loginId}님 접속중
+		<c:if test="${isLogined}">
+			${loginedMember.loginId}님 접속중
+		</c:if>
 		<a href="../article/main">홈으로</a>
 	</div>
 	
