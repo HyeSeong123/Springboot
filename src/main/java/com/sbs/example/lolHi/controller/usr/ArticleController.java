@@ -22,18 +22,21 @@ public class ArticleController {
 
 	@RequestMapping("/usr/article/main")
 	public String showMain() {
-		
+
 		return "usr/article/main";
 	}
+
 	@RequestMapping("/usr/article/list")
-	public String showList(Model model, @RequestParam Map<String, Object> param) {
+	public String showList(Model model, @RequestParam Map<String, Object> param, HttpServletRequest req) {
 		List<Article> articles = articleService.getArticles(param);
-		int totalCount = articleService.totalCount();
+		int totalCount = articleService.totalCount(param);
 		int itemsCountInAPage = 20;
 		int page = Util.getAsInt(param.get("page"), 1);
 		int totalPage = (int) Math.ceil(totalCount / (double) itemsCountInAPage);
 		int pageMenuArmSize = 10;
 		int pageMenuStart = page - pageMenuArmSize;
+
+		String searchKeyword = req.getParameter("searchKeyword");
 
 		if (pageMenuStart < 1) {
 			pageMenuStart = 1;
@@ -68,7 +71,7 @@ public class ArticleController {
 	@RequestMapping("/usr/article/doDelete")
 	public String doDelete(int num, HttpServletRequest req, Model model) {
 		int loginedMemberNum = (int) req.getAttribute("loginedMemberNum");
-		
+
 		Article article = articleService.getArticleByNum(loginedMemberNum);
 
 		if (article.getMemberNum() != loginedMemberNum) {
@@ -93,7 +96,7 @@ public class ArticleController {
 		model.addAttribute("article", article);
 
 		int loginedMemberNum = (int) req.getAttribute("loginedMemberNum");
-		
+
 		if (article.getMemberNum() != loginedMemberNum) {
 			model.addAttribute("msg", "수정 권한이 없습니다.");
 			model.addAttribute("replaceUri", "/usr/article/detail?num=" + num);
@@ -107,7 +110,7 @@ public class ArticleController {
 	public String doModify(int num, String title, String body, HttpServletRequest req, Model model) {
 
 		int loginedMemberNum = (int) req.getAttribute("loginedMemberNum");
-		
+
 		Article article = articleService.getArticleByNum(num);
 
 		if (article.getMemberNum() != loginedMemberNum) {

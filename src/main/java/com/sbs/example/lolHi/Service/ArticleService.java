@@ -55,8 +55,8 @@ public class ArticleService {
 		return num;
 	}
 
-	public int totalCount() {
-		return articleDao.totalCount();
+	public int totalCount(Map<String, Object> param) {
+		return articleDao.totalCount(param);
 	}
 
 }

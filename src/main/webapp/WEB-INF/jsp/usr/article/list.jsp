@@ -41,17 +41,17 @@
 		<c:forEach var="i" begin="${pageMenuStart}" end="${pageMenuEnd}">
 
 			<c:set var="className" value="${i==page ? 'selected' : ''}" />
-			<a class="${className}" href="list?page=${i}">${i}</a>
+			<a class="${className}" href="list?page=${i}&searchKeyword=${param.searchKeyword}">${i}</a>
 
 		</c:forEach>
 
 		<c:if test="${totalPage > 1 && page+10 < totalPage}">
 			<c:if test="${(page+10) > totalPage}">
-				<a href="list?page=${totalPage}">▶▶</a>
+				<a href="list?page=${totalPage}&searchKeyword=${param.searchKeyword}">▶▶</a>
 			</c:if>
 
 			<c:if test="${(page+10) < totalPage}">
-				<a href="list?page=${page+10}">▶▶</a>
+				<a href="list?page=${page+10}&searchKeyword=${param.searchKeyword}">▶▶</a>
 			</c:if>
 		</c:if>
 
