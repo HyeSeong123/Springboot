@@ -6,7 +6,7 @@
 
 	<select id="getArticles" resultMap="article">
 		SELECT A.*,
-		M.name AS extra__wrtier
+		M.name AS extra__writer
 		FROM article AS A
 		INNER JOIN member AS M
 		ON A.memberNum = M.num
@@ -16,10 +16,13 @@
 		</if>
 	</select>
 	
-	<select id="getArticleByNum" resultType="Article">
-		SELECT A.*
+	<select id="getArticleByNum" resultMap="article">
+		SELECT A.*,
+		M.name AS extra__writer
 		FROM article AS A
-		WHERE num = #{num}
+		INNER JOIN member AS M
+		ON A.memberNum = M.num
+		WHERE A.num = #{num}
 	</select>
 
 	<delete id="doDeleteArticleByNum">

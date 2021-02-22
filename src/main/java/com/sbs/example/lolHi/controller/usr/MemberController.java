@@ -2,17 +2,14 @@ package com.sbs.example.lolHi.controller.usr;
 
 import java.util.Map;
 
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.HttpSessionRequiredException;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sbs.example.lolHi.dto.Member;
 import com.sbs.example.lolHi.util.Util;
@@ -83,15 +80,7 @@ public class MemberController {
 	}
 
 	@RequestMapping("/usr/member/doLogin")
-	public String doLogin(String loginId, String loginPw, HttpServletRequest req , Model model) {
-		int loginedMemberNum = (int) req.getAttribute("loginedMemberNum");
-
-		if (loginedMemberNum > 0) {
-			model.addAttribute("msg", "로그아웃 후 이용해주세요.");
-			model.addAttribute("replaceUri", "/usr/article/list");
-			return "common/redirect";
-		}
-		
+	public String doLogin(String loginId, String loginPw, HttpSession session , Model model) {
 		if (loginId.length() == 0) {
 			model.addAttribute("msg", "로그인 아이디를 입력해주세요");
 			model.addAttribute("historyBack");
@@ -122,7 +111,7 @@ public class MemberController {
 			return "common/redirect";
 		}
 
-		req.setAttribute("loginedMemberNum", member.getNum());
+		session.setAttribute("loginedMemberNum", member.getNum());
 
 		model.addAttribute("msg", member.getLoginId() + "님의 로그인을 환영합니다.");
 		model.addAttribute("replaceUri", "/usr/article/list");
@@ -131,10 +120,38 @@ public class MemberController {
 	}
 
 	@RequestMapping("/usr/member/doLogout")
-	public String doLogout(HttpServletRequest req, Model model) {
-		req.setAttribute("loginedMemberNum", 0);
+	public String doLogout(HttpSession session, Model model) {
+		session.setAttribute("loginedMemberNum", 0);
 
 		model.addAttribute("msg", "로그아웃 되었습니다.");
+		model.addAttribute("replaceUri", "/usr/article/list");
+
+		return "common/redirect";
+	}
+	
+	@RequestMapping("/usr/member/showInforMe")
+	public String showInforMe(HttpSession session, Model model) {
+		
+		return "usr/member/showInforMe";
+	}
+	
+	@RequestMapping("/usr/member/modify")
+	public String showModify(HttpSession session, Model model) {
+		
+		return "usr/member/modify";
+	}
+	
+	@RequestMapping("/usr/member/doModify")
+	public String doModify(HttpSession session, Model model, @RequestParam Map<String, Object> param, HttpServletRequest req) {
+		int loginedMemberNum = (int) req.getAttribute("loginedMemberNum");
+		
+		param.put("num", loginedMemberNum);
+		
+		param.remove("loginId");
+		
+		memberService.doModify(param);
+		
+		model.addAttribute("msg", "수정되었습니다.");
 		model.addAttribute("replaceUri", "/usr/article/list");
 
 		return "common/redirect";

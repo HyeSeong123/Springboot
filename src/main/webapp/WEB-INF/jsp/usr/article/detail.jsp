@@ -10,6 +10,7 @@
 		<a onclick="if( confirm('삭제하시겠습니까?') == false) return false;" href="./doDelete?num=${article.num}">삭제</a>
 		<a href="./modify?num=${article.num}"> 수정</a>
 		<div> 게시물 번호 : ${article.num}</div>
+		<div> 게시물 작성자 : ${article.extra.writer}</div>
 		<div> 게시물 작성일 : ${article.regDate}</div>
 		<div> 게시물 수정일 : ${article.updateDate}</div>
 		<div> 게시물 제목 : ${article.title}</div>

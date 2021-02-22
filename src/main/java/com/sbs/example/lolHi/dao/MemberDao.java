@@ -16,4 +16,6 @@ public interface MemberDao {
 
 	Member getMemberByNum(@Param("num") int loginedMemberNum);
 
+	int doModify(Map<String, Object> param);
+
 }

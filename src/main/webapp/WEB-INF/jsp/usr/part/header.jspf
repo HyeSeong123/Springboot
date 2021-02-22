@@ -7,7 +7,18 @@
 <title>${title}</title>
 </head>
 <body>
-
-	[${loginedMemberNum}]
-	[${article.memberNum}]
-	[${article.num}]
+	
+	<div>
+		${loginedMember.loginId}님 접속중
+	</div>
+	
+	
+	<c:if test="${not isLogined}">
+		<a href="../member/join">회원 가입</a>
+		<a href="../member/login">로그인</a>
+	</c:if>
+	
+	<c:if test="${isLogined}">
+		<a href="../member/showInforMe">내 정보</a>
+		<a href="../member/doLogout">로그아웃</a>
+	</c:if>

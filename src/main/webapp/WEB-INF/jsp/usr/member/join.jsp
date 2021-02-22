@@ -89,6 +89,7 @@
 			<div>
 				닉네임 : <input type="text" name="nickname" placeholder="닉네임을 입력해주세요" />
 			</div>
+		<!--  	
 			<div>
 				전화번호 : <input type="text" name="telNum" placeholder="번호를 입력해주세요" />
 			</div>
@@ -96,7 +97,7 @@
 			<div>
 				핸드폰 : <input type="text" name=hpNum placeholder="휴대전화 번호를 입력해주세요" />
 			</div>
-
+ 														-->
 			<div>
 				이메일 : <input type="email" name=email placeholder="이메일을 입력해주세요" />
 			</div>

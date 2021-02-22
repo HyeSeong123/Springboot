@@ -30,4 +30,29 @@
 		WHERE num = ${num}
 	</select>
 
+	<update id="doModify">
+		UPDATE member
+		<set>
+			updateDate = NOW(),
+			
+			<if test="loginPw != null">
+				loginPw = #{loginPw},
+			</if>
+			
+			<if test="name != null">
+				`name` = #{name},
+			</if>
+			
+			<if test="nickname != null">
+				`nickname` = #{nickname},
+			</if>
+			
+			<if test="email != null">
+				`email` = #{email},
+			</if>
+			
+		</set>
+		WHERE num = #{num}
+	</update>
+	
 </mapper>

@@ -12,9 +12,10 @@ import com.sbs.example.lolHi.controller.usr.MemberService;
 import com.sbs.example.lolHi.dto.Member;
 
 @Component("beforeActionInterceptor")
-public class BeforeActionInterceptor implements HandlerInterceptor{
+public class BeforeActionInterceptor implements HandlerInterceptor {
 	@Autowired
 	private MemberService memberService;
+
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
@@ -26,8 +27,11 @@ public class BeforeActionInterceptor implements HandlerInterceptor{
 		Member loginedMember = null;
 
 		if (session.getAttribute("loginedMemberNum") != null) {
-			isLogined = true;
 			loginedMemberNum = (int) session.getAttribute("loginedMemberNum");
+
+			if (loginedMemberNum > 0) {
+				isLogined = true;
+			}
 			loginedMember = memberService.getMemberByNum(loginedMemberNum);
 		}
 
