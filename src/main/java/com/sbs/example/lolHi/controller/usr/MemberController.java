@@ -2,11 +2,14 @@ package com.sbs.example.lolHi.controller.usr;
 
 import java.util.Map;
 
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.HttpSessionRequiredException;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -20,12 +23,8 @@ public class MemberController {
 	private MemberService memberService;
 
 	@RequestMapping("/usr/member/join")
-	public String showJoin(Model model, HttpSession session) {
-		int loginedMemberNum = 0;
-
-		if (session.getAttribute("loginedMemberNum") != null) {
-			loginedMemberNum = (int) session.getAttribute("loginedMemberNum");
-		}
+	public String showJoin(Model model, HttpServletRequest req) {
+		int loginedMemberNum = (int) req.getAttribute("loginedMemberNum");
 
 		if (loginedMemberNum > 0) {
 			model.addAttribute("msg", "로그아웃 후 이용해주세요.");
@@ -37,12 +36,8 @@ public class MemberController {
 	}
 
 	@RequestMapping("/usr/member/doJoin")
-	public String doJoin(@RequestParam Map<String, Object> param, Model model, HttpSession session) {
-		int loginedMemberNum = 0;
-
-		if (session.getAttribute("loginedMemberNum") != null) {
-			loginedMemberNum = (int) session.getAttribute("loginedMemberNum");
-		}
+	public String doJoin(@RequestParam Map<String, Object> param, Model model, HttpServletRequest req) {
+		int loginedMemberNum = (int) req.getAttribute("loginedMemberNum");
 
 		if (loginedMemberNum > 0) {
 			model.addAttribute("msg", "로그아웃 후 이용해주세요.");
@@ -75,12 +70,8 @@ public class MemberController {
 	}
 
 	@RequestMapping("/usr/member/login")
-	public String showLogin(HttpSession session, Model model) {
-		int loginedMemberNum = 0;
-
-		if (session.getAttribute("loginedMemberNum") != null) {
-			loginedMemberNum = (int) session.getAttribute("loginedMemberNum");
-		}
+	public String showLogin(HttpServletRequest req, Model model) {
+		int loginedMemberNum = (int) req.getAttribute("loginedMemberNum");
 
 		if (loginedMemberNum > 0) {
 			model.addAttribute("msg", "로그아웃 후 이용해주세요.");
@@ -92,12 +83,8 @@ public class MemberController {
 	}
 
 	@RequestMapping("/usr/member/doLogin")
-	public String doLogin(String loginId, String loginPw, HttpSession session, Model model) {
-		int loginedMemberNum = 0;
-
-		if (session.getAttribute("loginedMemberNum") != null) {
-			loginedMemberNum = (int) session.getAttribute("loginedMemberNum");
-		}
+	public String doLogin(String loginId, String loginPw, HttpServletRequest req , Model model) {
+		int loginedMemberNum = (int) req.getAttribute("loginedMemberNum");
 
 		if (loginedMemberNum > 0) {
 			model.addAttribute("msg", "로그아웃 후 이용해주세요.");
@@ -135,7 +122,7 @@ public class MemberController {
 			return "common/redirect";
 		}
 
-		session.setAttribute("loginedMemberNum", member.getNum());
+		req.setAttribute("loginedMemberNum", member.getNum());
 
 		model.addAttribute("msg", member.getLoginId() + "님의 로그인을 환영합니다.");
 		model.addAttribute("replaceUri", "/usr/article/list");
@@ -144,8 +131,8 @@ public class MemberController {
 	}
 
 	@RequestMapping("/usr/member/doLogout")
-	public String doLogout(HttpSession session, Model model) {
-		session.setAttribute("loginedMemberNum", 0);
+	public String doLogout(HttpServletRequest req, Model model) {
+		req.setAttribute("loginedMemberNum", 0);
 
 		model.addAttribute("msg", "로그아웃 되었습니다.");
 		model.addAttribute("replaceUri", "/usr/article/list");

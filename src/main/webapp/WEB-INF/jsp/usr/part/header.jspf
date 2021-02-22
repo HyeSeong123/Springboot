@@ -8,6 +8,6 @@
 </head>
 <body>
 
-	[${sessionScope.loginedMemberNum}]
+	[${loginedMemberNum}]
 	[${article.memberNum}]
 	[${article.num}]
