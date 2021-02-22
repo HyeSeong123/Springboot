@@ -56,4 +56,11 @@
 		</c:if>
 
 	</div>
+	
+	<div>
+		<form>
+			<input type="text"  placeholder="검색어를 입력하세요" name="searchKeyword" value="${param.searchKeyword}"/>
+			<input type="submit" value="검색"/>
+		</form>
+	</div>
 <%@ include file="../part/footer.jspf"%>

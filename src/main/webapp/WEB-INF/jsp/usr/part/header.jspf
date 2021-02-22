@@ -10,6 +10,7 @@
 	
 	<div>
 		${loginedMember.loginId}님 접속중
+		<a href="../article/main">홈으로</a>
 	</div>
 	
 	

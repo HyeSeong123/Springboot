@@ -36,8 +36,6 @@ public class ArticleController {
 		int pageMenuArmSize = 10;
 		int pageMenuStart = page - pageMenuArmSize;
 
-		String searchKeyword = req.getParameter("searchKeyword");
-
 		if (pageMenuStart < 1) {
 			pageMenuStart = 1;
 		}
