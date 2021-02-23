@@ -1,6 +1,6 @@
 package com.sbs.example.lolHi.Service;
 
-import java.math.BigInteger;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.sbs.example.lolHi.dao.ArticleDao;
 import com.sbs.example.lolHi.dto.Article;
+import com.sbs.example.lolHi.dto.Member;
 import com.sbs.example.lolHi.util.Util;
 
 @Service
@@ -16,7 +17,7 @@ public class ArticleService {
 	@Autowired
 	private ArticleDao articleDao;
 
-	public List<Article> getArticles(Map<String, Object> param) {
+	public List<Article> getArticles(Member actorMember, Map<String, Object> param) {
 		int page = Util.getAsInt(param.get("page"), 0);
 
 		if (page < 0 || page == 0) {
@@ -31,11 +32,47 @@ public class ArticleService {
 		param.put("limitFrom", limitFrom);
 		param.put("limitTake", limitTake);
 
-		return articleDao.getArticles(param);
+		List<Article> articles = articleDao.getArticles(param);
+
+		for (Article article : articles) {
+			if (article.getExtra() == null) {
+				article.setExtra(new HashMap<>());
+			}
+
+			boolean actorCanDelete = false;
+			
+			if(actorMember != null) {
+				actorCanDelete = actorMember.getNum() == article.getMemberNum();
+			}
+			
+			boolean actorCanModify = actorCanDelete;
+			
+			article.getExtra().put("actorCanDelete", actorCanDelete);
+			article.getExtra().put("actorCanModify", actorCanModify);
+		}
+
+		return articles;
 	}
 
-	public Article getArticleByNum(int num) {
-		return articleDao.getArticleByNum(num);
+	public Article getArticleByNum(Member actorMember, int num) {
+		Article article = articleDao.getArticleByNum(num);
+		
+		if(article.getExtra() == null) {
+			article.setExtra(new HashMap<>());
+		}
+		
+		boolean actorCanDelete = false;
+		
+		if(actorMember != null) {
+			actorCanDelete = actorMember.getNum() == article.getMemberNum();
+		}
+		
+		boolean actorCanModify = actorCanDelete;
+		
+		article.getExtra().put("actorCanDelete", actorCanDelete);
+		article.getExtra().put("actorCanModify", actorCanModify);
+		
+		return article;
 	}
 
 	public void doDeleteArticleByNum(int num) {

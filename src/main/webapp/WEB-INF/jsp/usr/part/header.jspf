@@ -11,8 +11,9 @@
 	src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
-	
+
 	<div>
+		[${article.extra.actorCanDelete}]
 		<c:if test="${isLogined}">
 			${loginedMember.loginId} (${loginedMemberNum})님 접속중
 		</c:if>

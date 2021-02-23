@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.sbs.example.lolHi.Service.ArticleService;
 import com.sbs.example.lolHi.Service.ReplyService;
 import com.sbs.example.lolHi.dto.Article;
+import com.sbs.example.lolHi.dto.Member;
 import com.sbs.example.lolHi.dto.Reply;
 import com.sbs.example.lolHi.util.Util;
 
@@ -21,10 +22,10 @@ import com.sbs.example.lolHi.util.Util;
 public class ArticleController {
 	@Autowired
 	private ArticleService articleService;
-	
+
 	@Autowired
 	private ReplyService replyService;
-	
+
 	@RequestMapping("/usr/article/main")
 	public String showMain() {
 
@@ -33,7 +34,10 @@ public class ArticleController {
 
 	@RequestMapping("/usr/article/list")
 	public String showList(Model model, @RequestParam Map<String, Object> param, HttpServletRequest req) {
-		List<Article> articles = articleService.getArticles(param);
+		Member loginedMember = (Member) req.getAttribute("loginedMember");
+		
+		List<Article> articles = articleService.getArticles(loginedMember, param);
+
 		int totalCount = articleService.totalCount(param);
 		int itemsCountInAPage = 20;
 		int page = Util.getAsInt(param.get("page"), 1);
@@ -63,15 +67,16 @@ public class ArticleController {
 	}
 
 	@RequestMapping("/usr/article/detail")
-	public String showDetail(Model model, int num,String listUrl) {
-		Article article = articleService.getArticleByNum(num);
-		
+	public String showDetail(Model model, int num, String listUrl, HttpServletRequest req) {
+		Member loginedMember = (Member) req.getAttribute("loginedMember");
+		Article article = articleService.getArticleByNum(loginedMember, num);
+
 		List<Reply> replies = replyService.getReplies(num, "article");
-		
-		if(listUrl == null) {
+
+		if (listUrl == null) {
 			listUrl = "article/ust/list";
 		}
-		
+
 		model.addAttribute("article", article);
 		model.addAttribute("replies", replies);
 		model.addAttribute("listUrl", listUrl);
@@ -81,14 +86,16 @@ public class ArticleController {
 
 	@RequestMapping("/usr/article/doDelete")
 	public String doDelete(int num, HttpServletRequest req, Model model) {
+		Member loginedMember = (Member) req.getAttribute("loginedMember");
 		int loginedMemberNum = (int) req.getAttribute("loginedMemberNum");
 
-		Article article = articleService.getArticleByNum(loginedMemberNum);
+		Article article = articleService.getArticleByNum(loginedMember, loginedMemberNum);
 
-		if (article.getMemberNum() != loginedMemberNum) {
+		if ((boolean) article.getExtra().get("actorCanDelete") == false) {
 			model.addAttribute("msg", "삭제 권한이 없습니다.");
 			model.addAttribute("replaceUri", "/usr/article/detail?num=" + num);
 			return "common/redirect";
+
 		}
 
 		articleService.doDeleteArticleByNum(num);
@@ -101,14 +108,15 @@ public class ArticleController {
 
 	@RequestMapping("/usr/article/modify")
 	public String showModify(Model model, int num, HttpServletRequest req) {
-
-		Article article = articleService.getArticleByNum(num);
+		Member loginedMember = (Member) req.getAttribute("loginedMember");
+		
+		Article article = articleService.getArticleByNum(loginedMember,num);
 
 		model.addAttribute("article", article);
 
 		int loginedMemberNum = (int) req.getAttribute("loginedMemberNum");
 
-		if (article.getMemberNum() != loginedMemberNum) {
+		if ((boolean) article.getExtra().get("actorCanModify") == false) {
 			model.addAttribute("msg", "수정 권한이 없습니다.");
 			model.addAttribute("replaceUri", "/usr/article/detail?num=" + num);
 			return "common/redirect";
@@ -119,12 +127,12 @@ public class ArticleController {
 
 	@RequestMapping("/usr/article/doModify")
 	public String doModify(int num, String title, String body, HttpServletRequest req, Model model) {
-
+		Member loginedMember = (Member) req.getAttribute("loginedMember");
 		int loginedMemberNum = (int) req.getAttribute("loginedMemberNum");
 
-		Article article = articleService.getArticleByNum(num);
+		Article article = articleService.getArticleByNum(loginedMember,num);
 
-		if (article.getMemberNum() != loginedMemberNum) {
+		if ((boolean) article.getExtra().get("actorCanModify") == false) {
 			model.addAttribute("msg", "수정 권한이 없습니다.");
 			model.addAttribute("replaceUri", "/usr/article/detail?num=" + num);
 			return "common/redirect";

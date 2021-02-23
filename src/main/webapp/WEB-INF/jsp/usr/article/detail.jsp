@@ -6,9 +6,14 @@
 <%@ include file="../part/header.jspf"%>
 
 	<h1>게시물 상세화면</h1>
-		<c:if test=" ${loginedMemberNum == article.memberNum} ">
+		
 			<a href="${listUrl}">목록</a>
+			
+		<c:if test="${article.extra.actorCanDelete}">
 			<a onclick="if( confirm('삭제하시겠습니까?') == false) return false;" href="./doDelete?num=${article.num}">삭제</a>
+		</c:if>
+		
+		<c:if test="${article.extra.actorCanModify}">
 			<a href="./modify?num=${article.num}"> 수정</a>
 		</c:if>
 		
@@ -87,7 +92,7 @@
 					
 				</style>
 				
-				<c:if test= "${loginedMemberNum == reply.memberNum }">
+				<c:if test="${article.extra.actorCanDelete}">
 				<span class="modify modify${reply.num}">수정</span>
 				
 				<span class="modify_toggle modify_toggle${reply.num}">
@@ -102,10 +107,13 @@
 						<textarea name="body" rows="5"></textarea>
 						<input type="submit" value="수정"/>
 					</form>
+					
+				</c:if>
+				
+				<c:if test="${article.extra.actorCanModify}">
 				</span>
 				<a onclick="if( confirm('댓글을 삭제하시겠습니까?') == false) return false;" 
 							href="../reply/doDelete?num=${reply.num}&replaceUrl=${encodedCurrentUri}">삭제</a>
-							
 				</c:if>
 				
 				<hr />
