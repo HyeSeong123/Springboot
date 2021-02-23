@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.sbs.example.lolHi.Service.ReplyService;
+import com.sbs.example.lolHi.dto.Member;
 import com.sbs.example.lolHi.dto.Reply;
 
 @Controller
@@ -34,9 +35,10 @@ public class replyController {
 	
 	@RequestMapping("/usr/reply/doDelete")
 	public String doDelete(Model model, int num, HttpServletRequest req, String replaceUrl) {
+		Member loginedMember = (Member) req.getAttribute("loginedMember");
 		int loginedMemberNum = (int) req.getAttribute("loginedMemberNum");
 		
-		Reply reply = replyService.getArticleForNum(num);
+		Reply reply = replyService.getArticleForNum(loginedMember, num);
 		
 		if(replaceUrl == null || replaceUrl.length() == 0) {
 			replaceUrl = String.format("/usr/article/detail?num=" + reply.getRelNum());
