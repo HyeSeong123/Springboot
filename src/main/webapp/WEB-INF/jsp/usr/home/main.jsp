@@ -7,5 +7,5 @@
 <%@ include file="../part/header.jspf"%>
 	<h1>${title}</h1>
 	
-	<a href="list">게시물 리스트</a>
+	<a href="../article/list">게시물 리스트</a>
 <%@ include file="../part/footer.jspf"%>

@@ -10,12 +10,12 @@ spring:
     url: jdbc:log4jdbc:mysql://127.0.0.1:3306/lolHi?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul&useOldAliasMetadataBehavior=true&zeroDateTimeNehavior=convertToNull
     
     ## 회사
-    ## username: codingsepo
-    ## password: coding123414
+    username: codingsepo
+    password: coding123414
     
     ## 집
-    username: sbsst
-    password: sbs123414
+    ## username: sbsst
+    ## password: sbs123414
     
 mybatis:
   type-aliases-package: com.sbs.example.lolHi.dto

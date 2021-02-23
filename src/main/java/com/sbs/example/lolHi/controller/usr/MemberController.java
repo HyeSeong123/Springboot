@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.sbs.example.lolHi.Service.MemberService;
 import com.sbs.example.lolHi.dto.Member;
 import com.sbs.example.lolHi.util.Util;
 

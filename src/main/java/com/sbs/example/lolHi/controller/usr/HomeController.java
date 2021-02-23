@@ -12,8 +12,7 @@ public class HomeController {
 	@Autowired
 	private ArticleService articleService;
 	@RequestMapping("/usr/home/main")
-	@ResponseBody
 	public String showMain() {
-		return "안녕";
+		return "usr/home/main";
 	}
 }

@@ -5,14 +5,18 @@
 <head>
 <meta charset="UTF-8">
 <title>${title}</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- 제이쿼리 불러오기 -->
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
 	
 	<div>
 		<c:if test="${isLogined}">
-			${loginedMember.loginId}님 접속중
+			${loginedMember.loginId} (${loginedMemberNum})님 접속중
 		</c:if>
-		<a href="../article/main">홈으로</a>
+		<a href="../home/main">홈으로</a>
 	</div>
 	
 	

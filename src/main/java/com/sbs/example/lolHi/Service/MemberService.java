@@ -1,4 +1,4 @@
-package com.sbs.example.lolHi.controller.usr;
+package com.sbs.example.lolHi.Service;
 
 import java.util.Map;
 

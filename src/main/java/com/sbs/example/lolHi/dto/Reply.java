@@ -7,17 +7,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class Article {
+@NoArgsConstructor
+public class Reply {
 	private int num;
 	private String regDate;
 	private String updateDate;
 	private int memberNum;
-	private String title;
+	private String relNum;
+	private String relTypeCode;
 	private String body;
-	private int replyNum;
-	
+
 	private Map<String, Object> extra;
-	
 }

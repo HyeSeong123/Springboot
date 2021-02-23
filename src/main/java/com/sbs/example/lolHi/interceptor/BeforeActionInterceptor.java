@@ -8,8 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import com.sbs.example.lolHi.controller.usr.MemberService;
+import com.sbs.example.lolHi.Service.MemberService;
 import com.sbs.example.lolHi.dto.Member;
+import com.sbs.example.lolHi.util.Util;
 
 @Component("beforeActionInterceptor")
 public class BeforeActionInterceptor implements HandlerInterceptor {
@@ -39,6 +40,17 @@ public class BeforeActionInterceptor implements HandlerInterceptor {
 		request.setAttribute("isLogined", isLogined);
 		request.setAttribute("loginedMemberNum", loginedMemberNum);
 		request.setAttribute("loginedMember", loginedMember);
+
+		String currentUri = request.getRequestURI();
+
+		if (request.getQueryString() != null) {
+			currentUri += "?" + request.getQueryString();
+		}
+
+		String encodedCurrentUri = Util.getUriEncoded(currentUri);
+
+		request.setAttribute("currentUri", currentUri);
+		request.setAttribute("encodedCurrentUri", encodedCurrentUri);
 
 		return HandlerInterceptor.super.preHandle(request, response, handler);
 	}
