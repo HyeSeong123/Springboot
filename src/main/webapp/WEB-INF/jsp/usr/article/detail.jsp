@@ -24,7 +24,8 @@
 		<div> 댓글 : ${article.replyNum} </div>
 		<div> 
 			게시물 제목 : ${article.title}
-			<a href="../like?num=${article.num}">추천</a>
+			<a onclick="if ( confirm('추천하시겠습니까?') == false ) { return false; }" href="../like?num=${article.num}">좋아요</a>
+			<a onclick="if ( confirm('추천하시겠습니까?') == false ) { return false; }" href="../disLike?num=${article.num}">싫어요</a>
 		</div>
 		
 		<div> 
@@ -61,7 +62,6 @@
 			<input type="hidden" name="relNum" value="${article.num}"/>
 			<input type="hidden" name="relTypeCode" value="article"/>
 			<input type="hidden" name="num" value="${article.num}"/>
-			
 			<div>
 				<textarea name="body" rows="3"></textarea>
 			</div>
@@ -71,7 +71,7 @@
 			</div>
 		</form>
 		
-		<h2>댓글 목록</h2>
+		<h2>댓글 (${replies.size()})</h2>
 		
 		<div>
 			<c:forEach items="${replies}" var="reply">
@@ -92,9 +92,8 @@
 					
 				</style>
 				
-				<c:if test="${article.extra.actorCanDelete}">
+				<c:if test="${reply.extra.actorCanDelete}">
 				<span class="modify modify${reply.num}">수정</span>
-				
 				<span class="modify_toggle modify_toggle${reply.num}">
 					<form action="/usr/reply/doModify">
 						<input type="hidden" name="replaceUrl" value="${currentUri}" />
@@ -110,7 +109,7 @@
 					
 				</c:if>
 				
-				<c:if test="${article.extra.actorCanModify}">
+				<c:if test="${reply.extra.actorCanModify}">
 				</span>
 				<a onclick="if( confirm('댓글을 삭제하시겠습니까?') == false) return false;" 
 							href="../reply/doDelete?num=${reply.num}&replaceUrl=${encodedCurrentUri}">삭제</a>
@@ -125,4 +124,5 @@
 			  $(this).next().toggleClass('active_modify');
 			})
 		</script>
+		
 <%@ include file="../part/footer.jspf"%>

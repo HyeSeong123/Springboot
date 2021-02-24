@@ -23,4 +23,5 @@ public interface ArticleDao {
 
 	int totalCount(Map<String, Object> param);
 
+	Article getArticleByNumForReply(@Param("num") int num, @Param("replyNum") int replyNum);
 }

@@ -41,10 +41,31 @@ public class ReplyService {
 			reply.getExtra().put("actorCanDelete", actorCanDelete);
 			reply.getExtra().put("actorCanModify", actorCanModify);
 		}
-
 		return replies;
 	}
 
+	public List<Reply> getRepliesNum(@RequestParam("relTypeCode") String relTypeCode, Member actorMember) {
+		List<Reply> replies = replyDao.getRepliesNum(relTypeCode);
+		
+		for (Reply reply : replies) {
+			if (reply.getExtra() == null) {
+				reply.setExtra(new HashMap<>());
+			}
+
+			boolean actorCanDelete = false;
+			
+			if(actorMember != null) {
+				actorCanDelete = actorMember.getNum() == reply.getMemberNum();
+			}
+			
+			boolean actorCanModify = actorCanDelete;
+			
+			reply.getExtra().put("actorCanDelete", actorCanDelete);
+			reply.getExtra().put("actorCanModify", actorCanModify);
+		}
+		return replies;
+	}
+	
 	public int doDelete(@RequestParam("num") int num) {
 		return replyDao.doDelete(num);
 	}
@@ -73,5 +94,6 @@ public class ReplyService {
 	public void doModify(Map<String, Object> param) {
 		replyDao.doModify(param);
 	}
+
 
 }

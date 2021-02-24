@@ -35,9 +35,13 @@ public class ArticleController {
 	@RequestMapping("/usr/article/list")
 	public String showList(Model model, @RequestParam Map<String, Object> param, HttpServletRequest req) {
 		Member loginedMember = (Member) req.getAttribute("loginedMember");
-		
-		List<Article> articles = articleService.getArticles(loginedMember, param);
 
+		List<Article> articles = articleService.getArticles(loginedMember, param);
+		
+		List<Reply> replies = replyService.getRepliesNum("article", loginedMember);
+		
+		
+		
 		int totalCount = articleService.totalCount(param);
 		int itemsCountInAPage = 20;
 		int page = Util.getAsInt(param.get("page"), 1);
@@ -62,16 +66,26 @@ public class ArticleController {
 		model.addAttribute("pageMenuStart", pageMenuStart);
 		model.addAttribute("pageMenuEnd", pageMenuEnd);
 		model.addAttribute("articles", articles);
-
+		model.addAttribute("replies", replies);
+		
 		return "usr/article/list";
 	}
 
 	@RequestMapping("/usr/article/detail")
 	public String showDetail(Model model, int num, String listUrl, HttpServletRequest req) {
 		Member loginedMember = (Member) req.getAttribute("loginedMember");
-		Article article = articleService.getArticleByNum(loginedMember, num);
 
-		List<Reply> replies = replyService.getReplies(num, "article");
+		List<Reply> replies = replyService.getReplies(num, "article", loginedMember);
+
+		int replyNum = replies.size();
+
+		Article article = null;
+
+		if (replyNum > 0) {
+			article = articleService.getArticleByNumForReply(loginedMember, num, replyNum);
+		} else {
+			article = articleService.getArticleByNum(loginedMember, num);
+		}
 
 		if (listUrl == null) {
 			listUrl = "article/ust/list";
@@ -109,8 +123,8 @@ public class ArticleController {
 	@RequestMapping("/usr/article/modify")
 	public String showModify(Model model, int num, HttpServletRequest req) {
 		Member loginedMember = (Member) req.getAttribute("loginedMember");
-		
-		Article article = articleService.getArticleByNum(loginedMember,num);
+
+		Article article = articleService.getArticleByNum(loginedMember, num);
 
 		model.addAttribute("article", article);
 
@@ -130,7 +144,7 @@ public class ArticleController {
 		Member loginedMember = (Member) req.getAttribute("loginedMember");
 		int loginedMemberNum = (int) req.getAttribute("loginedMemberNum");
 
-		Article article = articleService.getArticleByNum(loginedMember,num);
+		Article article = articleService.getArticleByNum(loginedMember, num);
 
 		if ((boolean) article.getExtra().get("actorCanModify") == false) {
 			model.addAttribute("msg", "수정 권한이 없습니다.");

@@ -31,6 +31,21 @@
 		WHERE A.num = #{num}
 	</select>
 
+	<select id="getArticleByNumForReply" resultMap="article">
+		SELECT A.*,
+		M.name AS extra__writer,
+		COUNT(*) AS replyNum
+		FROM article AS A
+		INNER JOIN `member` AS M
+		ON A.memberNum = M.num
+		LEFT JOIN `reply` AS RE
+		ON RE.relTypeCode = 'article'
+		WHERE 1
+		AND A.num = RE.relNum
+		AND A.num = #{num}
+		GROUP BY A.num
+	</select>
+	
 	<delete id="doDeleteArticleByNum">
 		DELETE FROM article
 		WHERE num = #{num}
@@ -80,7 +95,8 @@
 			<id property="title" column="title" />
 			<id property="body" column="body" />
 			<id property="memberNum" column="memberNum" />
-		
+			<id property="replyNum" column="replyNum" />
+			
 		<association property="extra" javaType="map">
 			<id property="writer" column="extra__writer" />
 		</association>

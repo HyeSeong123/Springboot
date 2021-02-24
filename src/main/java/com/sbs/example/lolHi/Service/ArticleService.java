@@ -56,7 +56,7 @@ public class ArticleService {
 
 	public Article getArticleByNum(Member actorMember, int num) {
 		Article article = articleDao.getArticleByNum(num);
-		
+		System.out.println("article= " + article);
 		if(article.getExtra() == null) {
 			article.setExtra(new HashMap<>());
 		}
@@ -94,6 +94,27 @@ public class ArticleService {
 
 	public int totalCount(Map<String, Object> param) {
 		return articleDao.totalCount(param);
+	}
+
+	public Article getArticleByNumForReply(Member actorMember, int num, int replyNum) {
+		Article article = articleDao.getArticleByNumForReply(num,replyNum);
+		System.out.println("article= " + article);
+		if(article.getExtra() == null) {
+			article.setExtra(new HashMap<>());
+		}
+		
+		boolean actorCanDelete = false;
+		
+		if(actorMember != null) {
+			actorCanDelete = actorMember.getNum() == article.getMemberNum();
+		}
+		
+		boolean actorCanModify = actorCanDelete;
+		
+		article.getExtra().put("actorCanDelete", actorCanDelete);
+		article.getExtra().put("actorCanModify", actorCanModify);
+		
+		return article;
 	}
 
 }

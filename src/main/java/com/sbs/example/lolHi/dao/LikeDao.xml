@@ -2,8 +2,8 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.sbs.example.lolHi.dao.ReplyDao">
-	<insert id="doWrite" useGeneratedKeys="true" keyProperty="num">
+<mapper namespace="com.sbs.example.lolHi.dao.LikeDao">
+	<insert id="doLike" useGeneratedKeys="true" keyProperty="num">
 		INSERT INTO `reply`
 		<set>
 			regDate = NOW(),
@@ -11,10 +11,10 @@
 			memberNum = #{memberNum},
 			relNum = #{relNum},
 			relTypeCode = #{relTypeCode},
-			body = #{body}
+			point = 1
 		</set>
 	</insert>
-
+<!-- 
 	<select id="getReplies" resultMap="reply">
 		SELECT RE.* ,
 		M.name AS
@@ -28,25 +28,7 @@
 		AND relTypeCode = #{relTypeCode}
 		ORDER BY RE.num DESC
 	</select>
-
-	<select id="getRepliesNum" resultMap="reply">
-		SELECT RE.* ,
-		M.name AS
-		extra__writer
-		FROM `reply` AS RE
-		INNER JOIN `member` AS M
-		ON RE.memberNum = M.num
-		WHERE 1
-		AND relTypeCode = #{relTypeCode}
-		ORDER BY RE.num DESC
-	</select>
-
-	<select id="getArticleForNum" resultType="Reply">
-		SELECT *
-		FROM reply
-		WHERE num = #{num}
-	</select>
-
+	
 	<delete id="doDelete">
 		DELETE FROM reply
 		WHERE num = #{num}
@@ -80,5 +62,5 @@
 			<id property="writer" column="extra__writer" />
 		</association>
 	</resultMap>
-
+ -->
 </mapper>

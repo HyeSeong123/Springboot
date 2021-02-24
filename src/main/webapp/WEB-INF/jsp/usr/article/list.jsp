@@ -14,12 +14,20 @@
 	<hr></hr>
 	<c:forEach items="${articles}" var="article">
 	<c:set var="detailUrl" value="/usr/article/detail?num=${article.num}&listUrl=${encodedCurrentUri}" />
+	<c:set var="count" value= "0" />
 	
 		<span> 게시물 번호 : ${article.num}</span>
 		<span> 작성자 : ${article.extra.writer}</span>
 		<span> 게시물 작성일 : ${article.regDate}</span>
 		<span> 게시물 수정일 : ${article.updateDate}</span>
 		<a href="${detailUrl}"> 게시물 제목 : ${article.title}</a>
+		
+		<c:forEach items="${replies}" var="reply">
+			<c:if test= "${reply.relNum == article.num}" >
+				<c:set var="count" value= "${count+1}" />			
+			</c:if>
+		</c:forEach>
+		[<c:out value="${count}" />]
 		<hr />
 	</c:forEach>
 

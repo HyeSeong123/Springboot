@@ -17,6 +17,7 @@ public class Article {
 	private String title;
 	private String body;
 	private int replyNum;
+	private int likeNum;
 	
 	private Map<String, Object> extra;
 	

@@ -38,14 +38,14 @@ public class replyController {
 		Member loginedMember = (Member) req.getAttribute("loginedMember");
 		int loginedMemberNum = (int) req.getAttribute("loginedMemberNum");
 		
-		Reply reply = replyService.getArticleForNum(loginedMember, num);
+		Reply reply = replyService.getArticleForNum(num, loginedMember);
 		
 		if(replaceUrl == null || replaceUrl.length() == 0) {
 			replaceUrl = String.format("/usr/article/detail?num=" + reply.getRelNum());
 		}
 		String listUrl = req.getParameter("replaceUrl");
 		
-		if (reply.getMemberNum() != loginedMemberNum) {
+		if ((boolean) reply.getExtra().get("actorCanModify") == false) {
 			model.addAttribute("msg", "삭제 권한이 없습니다.");
 			model.addAttribute("replaceUri", "/usr/article/detail?num=" + reply.getRelNum() + "&" + listUrl);
 			return "common/redirect";
@@ -61,16 +61,17 @@ public class replyController {
 	
 	@RequestMapping("/usr/reply/doModify")
 	public String doModify(Model model, @RequestParam Map<String, Object> param, int replyNum, int num, HttpServletRequest req,String replaceUrl) {
+		Member loginedMember = (Member) req.getAttribute("loginedMember");
 		int loginedMemberNum = (int) req.getAttribute("loginedMemberNum");
 		
-		Reply reply = replyService.getArticleForNum(replyNum);
+		Reply reply = replyService.getArticleForNum(replyNum, loginedMember);
 		
 		if(replaceUrl == null || replaceUrl.length() == 0) {
 			replaceUrl = String.format("/usr/article/detail?num=" + reply.getRelNum());
 		}
 		String listUrl = req.getParameter("replaceUrl");
 				
-		if (reply.getMemberNum() != loginedMemberNum) {
+		if ((boolean) reply.getExtra().get("actorCanModify") == false) {
 			model.addAttribute("msg", "수정 권한이 없습니다.");
 			model.addAttribute("replaceUri", "/usr/article/detail?num=" + reply.getRelNum() + "&" + listUrl);
 			return "common/redirect";

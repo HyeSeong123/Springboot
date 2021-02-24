@@ -62,5 +62,31 @@ CREATE TABLE `like`(
     relTypeCode CHAR(30) NOT NULL,
     `point` TINYINT(1) UNSIGNED NOT NULL
 );
-		
+
+ALTER TABLE article DROP COLUMN replyNum
+
+SELECT A.*,
+M.name AS extra__writer,
+COUNT(*) AS extra__reply
+FROM article AS A
+INNER JOIN `member` AS M
+ON A.memberNum = M.num
+LEFT JOIN `reply` AS RE
+ON RE.relTypeCode = 'article'
+WHERE A.num = RE.relNum
+GROUP BY A.num
+
+SELECT A.*,
+    M.name AS extra__writer,
+    COUNT(RE.relNum) AS replyNum
+    FROM article AS A
+    INNER JOIN `member` AS M
+        ON A.memberNum = M.num
+    LEFT JOIN reply AS RE
+        ON RE.relTypeCode = 'article'
+    WHERE 1
+        AND title LIKE CONCAT('%', '123' , '%')
+        AND A.num = RE.relNum
+    ORDER BY A.num DESC
+    
 		

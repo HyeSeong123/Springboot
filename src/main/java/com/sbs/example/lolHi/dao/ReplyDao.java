@@ -19,5 +19,7 @@ public interface ReplyDao {
 	Reply getArticleForNum(int num);
 
 	void doModify(Map<String, Object> param);
+
+	List<Reply> getRepliesNum(String relTypeCode);
 	
 }
