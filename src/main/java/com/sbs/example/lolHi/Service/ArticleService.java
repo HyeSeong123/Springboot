@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.sbs.example.lolHi.controller.dto.Board;
 import com.sbs.example.lolHi.dao.ArticleDao;
 import com.sbs.example.lolHi.dto.Article;
 import com.sbs.example.lolHi.dto.Member;
@@ -115,6 +116,10 @@ public class ArticleService {
 		article.getExtra().put("actorCanModify", actorCanModify);
 		
 		return article;
+	}
+
+	public Board getBoardByCode(String boardCode) {
+		return articleDao.getBoardByCode(boardCode);
 	}
 
 }

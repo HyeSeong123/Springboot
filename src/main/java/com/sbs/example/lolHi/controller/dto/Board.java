@@ -1,4 +1,4 @@
-package com.sbs.example.lolHi.dto;
+package com.sbs.example.lolHi.controller.dto;
 
 import java.util.Map;
 
@@ -9,17 +9,12 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Article {
+public class Board {
 	private int num;
 	private String regDate;
 	private String updateDate;
-	private int memberNum;
-	private int boardNum;
-	private String title;
-	private String body;
-	private int replyNum;
-	private int likePoint;
-
+	private String name;
+	private String code;
+	
 	private Map<String, Object> extra;
-
 }

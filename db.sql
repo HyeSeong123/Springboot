@@ -52,15 +52,25 @@ CREATE TABLE reply(
     relTypeCode CHAR(30) NOT NULL,
     `body` LONGTEXT NOT NULL
 );
-		
+
+DROP TABLE `like`
 CREATE TABLE `like`(
     num INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
     regDate DATETIME NOT NULL,
     updateDate DATETIME NOT NULL,
     memberNum INT(10) UNSIGNED NOT NULL,
-    relTypeNum INT(10) UNSIGNED NOT NULL,
+    relNum INT(10) UNSIGNED NOT NULL,
     relTypeCode CHAR(30) NOT NULL,
     `point` TINYINT(1) UNSIGNED NOT NULL
+);
+
+DROP TABLE `board`
+CREATE TABLE `board`(
+    num INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    regDate DATETIME NOT NULL,
+    updateDate DATETIME NOT NULL,
+    `name` CHAR(50) UNIQUE NOT NULL,
+    `code` CHAR(50) UNIQUE NOT NULL
 );
 
 ALTER TABLE article DROP COLUMN replyNum
@@ -76,17 +86,15 @@ ON RE.relTypeCode = 'article'
 WHERE A.num = RE.relNum
 GROUP BY A.num
 
+/* 1차 시도 */
 SELECT A.*,
-    M.name AS extra__writer,
-    COUNT(RE.relNum) AS replyNum
-    FROM article AS A
-    INNER JOIN `member` AS M
-        ON A.memberNum = M.num
-    LEFT JOIN reply AS RE
-        ON RE.relTypeCode = 'article'
-    WHERE 1
-        AND title LIKE CONCAT('%', '123' , '%')
-        AND A.num = RE.relNum
-    ORDER BY A.num DESC
-    
-		
+M.name AS extra__writer,
+		IFNULL(SUM(L.point), 0) AS likePoint
+		FROM article AS A
+		INNER JOIN `member` AS M
+		ON A.memberNum = M.num
+		LEFT JOIN `like` AS L
+		ON A.num = L.relNum
+		WHERE 1
+		AND A.num = 35
+		GROUP BY A.num

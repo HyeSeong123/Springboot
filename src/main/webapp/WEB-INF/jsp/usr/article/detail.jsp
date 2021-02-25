@@ -10,22 +10,33 @@
 			<a href="${listUrl}">목록</a>
 			
 		<c:if test="${article.extra.actorCanDelete}">
-			<a onclick="if( confirm('삭제하시겠습니까?') == false) return false;" href="./doDelete?num=${article.num}">삭제</a>
+			<a onclick="if( confirm('삭제하시겠습니까?') == false) return false;" href="./doDelete?num=${article.num}&listUrl=${saveUrl}">삭제</a>
 		</c:if>
 		
 		<c:if test="${article.extra.actorCanModify}">
-			<a href="./modify?num=${article.num}"> 수정</a>
+			<a href="./modify?num=${article.num}&listUrl=${saveUrl}"> 수정</a>
 		</c:if>
-		
+		${board.name}
 		<div> 게시물 번호 : ${article.num}</div>
 		<div> 게시물 작성자 : ${article.extra.writer}</div>
 		<div> 게시물 작성일 : ${article.regDate}</div>
 		<div> 게시물 수정일 : ${article.updateDate}</div>
-		<div> 댓글 : ${article.replyNum} </div>
+		<div> 댓글 : ${replies.size()} </div>
+		<div> 좋아요 : ${article.likePoint} </div>
 		<div> 
 			게시물 제목 : ${article.title}
-			<a onclick="if ( confirm('추천하시겠습니까?') == false ) { return false; }" href="../like?num=${article.num}">좋아요</a>
-			<a onclick="if ( confirm('추천하시겠습니까?') == false ) { return false; }" href="../disLike?num=${article.num}">싫어요</a>
+			<c:if test="${availAbleLike}">
+				<a onclick="if ( confirm('추천하시겠습니까?') == false ) { return false; }" href="
+					../like/doLike?num=${article.num}&memberNum=${loginedMemberNum}&relNum=${article.num}&relTypeCode=article&listUrl=${saveUrl}">
+					좋아요</a>
+			</c:if>
+			
+			<c:if test="${availAbleLike == false}">
+				<a onclick="if ( confirm('추천 취소 하시겠습니까?') == false ) { return false; }" href="
+					../like/doDislike?num=${article.num}&memberNum=${loginedMemberNum}&relNum=${article.num}&relTypeCode=article&listUrl=${saveUrl}">
+					좋아요 취소</a>
+			</c:if>
+			<!--  <a onclick="if ( confirm('추천하시겠습니까?') == false ) { return false; }" href="../disLike?num=${article.num}">싫어요</a>  -->
 		</div>
 		
 		<div> 

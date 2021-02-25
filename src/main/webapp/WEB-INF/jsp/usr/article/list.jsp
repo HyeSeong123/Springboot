@@ -18,6 +18,7 @@
 	
 		<span> 게시물 번호 : ${article.num}</span>
 		<span> 작성자 : ${article.extra.writer}</span>
+		<span> 좋아요 : ${article.likePoint}</span>
 		<span> 게시물 작성일 : ${article.regDate}</span>
 		<span> 게시물 수정일 : ${article.updateDate}</span>
 		<a href="${detailUrl}"> 게시물 제목 : ${article.title}</a>

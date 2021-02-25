@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import com.sbs.example.lolHi.controller.dto.Board;
 import com.sbs.example.lolHi.dto.Article;
 
 @Mapper
@@ -24,4 +25,6 @@ public interface ArticleDao {
 	int totalCount(Map<String, Object> param);
 
 	Article getArticleByNumForReply(@Param("num") int num, @Param("replyNum") int replyNum);
+
+	Board getBoardByCode(@Param("boardCode")String boardCode);
 }

@@ -6,40 +6,50 @@
 
 	<select id="getArticles" resultMap="article">
 		SELECT A.*,
-		M.name AS extra__writer
+		M.name AS extra__writer,
+		IFNULL(SUM(L.point), 0) AS likePoint
 		FROM article AS A
 		INNER JOIN member AS M
 		ON A.memberNum = M.num
+		LEFT JOIN `like` AS L
+		ON A.num = L.relNum
 		WHERE 1
 		<if test="searchKeyword != null ">
 			AND title LIKE CONCAT('%', #{searchKeyword}, '%')
 			AND body  LIKE CONCAT('%', #{searchKeyword}, '%')
 		</if>
 		
-		ORDER BY A.num DESC
+		GROUP BY A.num DESC
 		<if test = "limitFrom != null and limitTake != null">
 			 limit ${limitFrom}, ${limitTake}
 		</if>
+		
 	</select>
 	
 	<select id="getArticleByNum" resultMap="article">
 		SELECT A.*,
-		M.name AS extra__writer
+		M.name AS extra__writer,
+		IFNULL(SUM(L.point), 0) AS likePoint
 		FROM article AS A
-		INNER JOIN member AS M
+		INNER JOIN `member` AS M
 		ON A.memberNum = M.num
+		LEFT JOIN `like` AS L
+		ON A.num = L.relNum
 		WHERE A.num = #{num}
 	</select>
 
 	<select id="getArticleByNumForReply" resultMap="article">
 		SELECT A.*,
 		M.name AS extra__writer,
-		COUNT(*) AS replyNum
+		COUNT(*) AS replyNum,
+		IFNULL(SUM(L.point), 0) AS likePoint
 		FROM article AS A
 		INNER JOIN `member` AS M
 		ON A.memberNum = M.num
 		LEFT JOIN `reply` AS RE
 		ON RE.relTypeCode = 'article'
+		LEFT JOIN `like` AS L
+		ON A.num = L.relNum
 		WHERE 1
 		AND A.num = RE.relNum
 		AND A.num = #{num}
@@ -88,6 +98,12 @@
 		
 	</select>
 	
+	<select id="getBoardByCode" resultType="Board">
+		SELECT *
+		FROM board
+		WHERE code = ${boardCode}
+	</select>
+	
 	<resultMap type="Article" id="article">
 			<id property="num" column="num" />
 			<id property="regDate" column="regDate" />
@@ -95,7 +111,9 @@
 			<id property="title" column="title" />
 			<id property="body" column="body" />
 			<id property="memberNum" column="memberNum" />
+			<id property="boardNum" column="boardNum" />
 			<id property="replyNum" column="replyNum" />
+			<id property="likePoint" column="likePoint" />
 			
 		<association property="extra" javaType="map">
 			<id property="writer" column="extra__writer" />

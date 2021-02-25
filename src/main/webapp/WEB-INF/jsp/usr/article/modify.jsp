@@ -5,12 +5,13 @@
 <c:set var="title" value="게시물 수정" />
 
 <%@ include file="../part/header.jspf"%>
-	<h1>게시물 수정</h1>
-		<a href="./list">목록</a>
-		
+	<h1>${title}</h1>
+		<a onClick="history.back()" href="#">이전화면</a>
 		<div> 게시물 번호 : ${article.num}</div>
 
 		<form action="doModify" method="POST">
+		<input type="hidden" name="listUrl" value="${listUrl}" />
+		
 			<input type="hidden" name="num" value="${article.num}"/>
 			
 			<input type="text" name="title" value="${article.title}"/>
