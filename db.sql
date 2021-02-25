@@ -15,6 +15,10 @@ CREATE TABLE article(
 );
 
 ALTER TABLE article ADD COLUMN memberNum INT(10) UNSIGNED NOT NULL AFTER updateDate
+ALTER TABLE article ADD COLUMN boardNum INT(10) UNSIGNED NOT NULL AFTER memberNum
+
+UPDATE article SET boardNum = 1 WHERE num <=15;
+UPDATE article SET boardNum = 2 WHERE num >15;
 
 UPDATE article SET memberNum = 1 WHERE memberNum = 0;
 
@@ -72,6 +76,18 @@ CREATE TABLE `board`(
     `name` CHAR(50) UNIQUE NOT NULL,
     `code` CHAR(50) UNIQUE NOT NULL
 );
+
+INSERT INTO board
+    SET regDate = NOW(),
+    updateDate = NOW(),
+    `name` = '공지사항',
+    `code` = 'notice'
+
+INSERT INTO board
+    SET regDate = NOW(),
+    updateDate = NOW(),
+    `name` = '자유게시판',
+    `code` = 'free'
 
 ALTER TABLE article DROP COLUMN replyNum
 
