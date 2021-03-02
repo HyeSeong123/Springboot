@@ -37,7 +37,9 @@
 	</script>
 	<div>
 		<form action="doLogin" method="POST" onsubmit="loginFormSubmit(this); return false;">
-
+			
+			<input type="text" name="listUrl" value="${encodedPreUrl}" readonly />
+			
 			<div>
 				아이디 : <input type="text" name="loginId" placeholder="아이디를 입력해주세요" />
 			</div>

@@ -26,7 +26,7 @@ public class LikeController {
 	private ArticleService articleService;
 	
 	@RequestMapping("/usr/like/doLike")
-	public String doLike(HttpServletRequest req, Model model,@RequestParam Map<String, Object> param,String listUrl) {
+	public String doLike(HttpServletRequest req, Model model,@RequestParam Map<String, Object> param,String listUrl, String boardCode) {
 		Member loginedMember = (Member) req.getAttribute("loginedMember");
 		int loginedMemberNum = (int) req.getAttribute("loginedMemberNum");
 		
@@ -41,7 +41,7 @@ public class LikeController {
 		if(like != null) {
 			if(article.getMemberNum() == like.getMemberNum()) {
 				model.addAttribute("msg", "중복 추천은 불가합니다.");
-				model.addAttribute("replaceUri", "/usr/article/detail?num=" + article.getNum() + "&listUrl=" + listUrl);
+				model.addAttribute("replaceUri", "/usr/article-" + boardCode + "/detail?num=" + article.getNum() + "&listUrl=" + listUrl);
 				return "common/redirect";
 			}
 		}
@@ -49,13 +49,13 @@ public class LikeController {
 		likeService.doLike(param);
 		
 		model.addAttribute("msg", "좋아요 처리 되엇습니다.");
-		model.addAttribute("replaceUri", "/usr/article/detail?num=" + article.getNum() + "&listUrl=" + listUrl);
+		model.addAttribute("replaceUri", "/usr/article-" + boardCode + "/detail?num=" + article.getNum() + "&listUrl=" + listUrl);
 		
 		return "common/redirect";
 	}
 	
 	@RequestMapping("/usr/like/doDislike")
-	public String doDislike(HttpServletRequest req, Model model,@RequestParam Map<String, Object> param,String listUrl) {
+	public String doDislike(HttpServletRequest req, Model model,@RequestParam Map<String, Object> param,String listUrl, String boardCode) {
 		Member loginedMember = (Member) req.getAttribute("loginedMember");
 		int loginedMemberNum = (int) req.getAttribute("loginedMemberNum");
 		int num = Util.getAsInt(param.get("num"), 0);
@@ -66,27 +66,24 @@ public class LikeController {
 		
 		Like like = likeService.getLikeByParam(param);
 		
-		System.out.println("like= " + like);
-		System.out.println("article= " + article);
-		
 		if(like != null) {
 			if(loginedMember.getNum() != like.getMemberNum()) {
 				model.addAttribute("msg", "좋아요를 누른 뒤 사용 가능합니다.");
-				model.addAttribute("replaceUri", "/usr/article/detail?num=" + article.getNum() + "&listUrl=" + listUrl);
+				model.addAttribute("replaceUri", "/usr/article-" + boardCode + "/detail?num=" + article.getNum() + "&listUrl=" + listUrl);
 				return "common/redirect";
 			}
 		}
 
 		if(like == null) {
 			model.addAttribute("msg", "좋아요를 누른 뒤 사용 가능합니다.");
-			model.addAttribute("replaceUri", "/usr/article/detail?num=" + article.getNum() + "&listUrl=" + listUrl);
+			model.addAttribute("replaceUri", "/usr/article-" + boardCode + "/detail?num=" + article.getNum() + "&listUrl=" + listUrl);
 			return "common/redirect";
 		}
 		
 		likeService.doDelete(param);
 		
 		model.addAttribute("msg", "좋아요 취소 되엇습니다.");
-		model.addAttribute("replaceUri", "/usr/article/detail?num=" + article.getNum() + "&listUrl=" + listUrl);
+		model.addAttribute("replaceUri", "/usr/article-" + boardCode + "/detail?num=" + article.getNum() + "&listUrl=" + listUrl);
 		
 		return "common/redirect";
 	}

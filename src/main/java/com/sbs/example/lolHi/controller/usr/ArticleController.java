@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.sbs.example.lolHi.Service.ArticleService;
 import com.sbs.example.lolHi.Service.LikeService;
+import com.sbs.example.lolHi.Service.MemberService;
 import com.sbs.example.lolHi.Service.ReplyService;
 import com.sbs.example.lolHi.dto.Article;
 import com.sbs.example.lolHi.dto.Board;
@@ -25,6 +26,9 @@ import com.sbs.example.lolHi.util.Util;
 @Controller
 public class ArticleController {
 	@Autowired
+	private MemberService memberService;
+	
+	@Autowired
 	private ArticleService articleService;
 
 	@Autowired
@@ -32,12 +36,6 @@ public class ArticleController {
 
 	@Autowired
 	private LikeService likeService;
-	
-	@RequestMapping("/usr/article/main")
-	public String showMain() {
-
-		return "usr/article/main";
-	}
 
 	@RequestMapping("/usr/article-{boardCode}/list")
 	public String showList(Model model, @RequestParam Map<String, Object> param,@PathVariable("boardCode") String boardCode, HttpServletRequest req) {
@@ -90,19 +88,18 @@ public class ArticleController {
 		return "usr/article/list";
 	}
 
-	@RequestMapping("/usr/article/detail")
-	public String showDetail(Model model, int num, String listUrl, HttpServletRequest req) {
+	@RequestMapping("/usr/article-{boardCode}/detail")
+	public String showDetail(Model model, int num, String listUrl, HttpServletRequest req,@PathVariable("boardCode") String boardCode) {
+		Board board = articleService.getBoardByCode(boardCode);
+		
 		Member loginedMember = (Member) req.getAttribute("loginedMember");
+		
 		int loginedMemberNum = (int) req.getAttribute("loginedMemberNum");
 		boolean availAbleLike = false;
 		
 		List<Reply> replies = replyService.getReplies(num, "article", loginedMember);
 		
 		Like like = likeService.getLikeByParam(num, loginedMemberNum);
-		
-		System.out.println("like= " + like);
-		System.out.println("num= " + num);
-		System.out.println("loginedMemberNum= " + loginedMemberNum);
 		
 		if(like == null) {
 			availAbleLike = true;
@@ -122,6 +119,7 @@ public class ArticleController {
 			listUrl = "article/ust/list";
 		}
 		
+		model.addAttribute("board", board);
 		model.addAttribute("availAbleLike", availAbleLike);
 		model.addAttribute("article", article);
 		model.addAttribute("replies", replies);
@@ -131,17 +129,19 @@ public class ArticleController {
 		return "usr/article/detail";
 	}
 
-	@RequestMapping("/usr/article/doDelete")
+	@RequestMapping("/usr/article-{boardCode}/doDelete")
 	public String doDelete(int num, HttpServletRequest req, Model model, String listUrl) {
 		Member loginedMember = (Member) req.getAttribute("loginedMember");
 		int loginedMemberNum = (int) req.getAttribute("loginedMemberNum");
 
 		Article article = articleService.getArticleByNum(loginedMember, loginedMemberNum);
 
-		if ((boolean) article.getExtra().get("actorCanDelete") == false) {
-			model.addAttribute("msg", "삭제 권한이 없습니다.");
-			model.addAttribute("replaceUri", "/usr/article/detail?num=" + num + "&listUrl=" + listUrl);
-			return "common/redirect";
+		if(loginedMember.getLoginId().equals("baobab612") == false) {
+			if ((boolean) article.getExtra().get("actorCanDelete") == false) {
+				model.addAttribute("msg", "삭제 권한이 없습니다.");
+				model.addAttribute("replaceUri", "/usr/article/detail?num=" + num + "&listUrl=" + listUrl);
+				return "common/redirect";
+			}
 		}
 
 		articleService.doDeleteArticleByNum(num);
@@ -152,16 +152,19 @@ public class ArticleController {
 		return "common/redirect";
 	}
 
-	@RequestMapping("/usr/article/modify")
-	public String showModify(Model model, int num, HttpServletRequest req, String listUrl) {
+	@RequestMapping("/usr/article-{boardCode}/modify")
+	public String showModify(Model model, int num, HttpServletRequest req, String listUrl, String boardCode) {
 		Member loginedMember = (Member) req.getAttribute("loginedMember");
 
+		Board board = articleService.getBoardByCode(boardCode);
+		
 		Article article = articleService.getArticleByNum(loginedMember, num);
-
+		
 		model.addAttribute("article", article);
 
 		listUrl = Util.getUriEncoded(listUrl);
-
+		
+		model.addAttribute("board",board);
 		model.addAttribute("listUrl", listUrl);
 		
 		int loginedMemberNum = (int) req.getAttribute("loginedMemberNum");
@@ -175,49 +178,77 @@ public class ArticleController {
 		return String.format("usr/article/modify");
 	}
 
-	@RequestMapping("/usr/article/doModify")
-	public String doModify(int num, String title, String body, HttpServletRequest req, Model model, String listUrl) {
+	@RequestMapping("/usr/article-{boardCode}/doModify")
+	public String doModify(int num, String title, String body, HttpServletRequest req, Model model, String listUrl,String boardCode) {
 		Member loginedMember = (Member) req.getAttribute("loginedMember");
 		int loginedMemberNum = (int) req.getAttribute("loginedMemberNum");
 		
+		Board board = articleService.getBoardByCode(boardCode);
+		
 		Article article = articleService.getArticleByNum(loginedMember, num);
 
+		model.addAttribute("board",board);
+		
 		if ((boolean) article.getExtra().get("actorCanModify") == false) {
 			model.addAttribute("msg", "수정 권한이 없습니다.");
-			model.addAttribute("replaceUri", "/usr/article/detail?num=" + num + "&listUrl=" + listUrl);
+			model.addAttribute("replaceUri", "/usr/article-" + boardCode + "/detail?num=" + num + "&listUrl=" + listUrl);
 			return "common/redirect";
 		}
-		
-       //	listUrl = Util.getUriEncoded(listUrl);
 		
 		articleService.doModifyArticleByNum(num, title, body);
 
 		model.addAttribute("msg", num + "번 글을 수정하였습니다");
-		model.addAttribute("replaceUri", "/usr/article/detail?num=" + num + "&listUrl=" + listUrl);
+		model.addAttribute("replaceUri", "/usr/article-" + boardCode + "/detail?num=" + num + "&listUrl=" + listUrl);
 
 		return "common/redirect";
 	}
 
-	@RequestMapping("/usr/article/write")
-	public String showWrite(HttpServletRequest req, Model model) {
+	@RequestMapping("/usr/article-{boardCode}/write")
+	public String showWrite(HttpServletRequest req, Model model, String boardCode) {
 		int loginedMemberNum = (int) req.getAttribute("loginedMemberNum");
 		
+		Member member = memberService.getMemberByNum(loginedMemberNum);
+	
+		Board board = articleService.getBoardByCode(boardCode);
 		
+		if(boardCode.equals("notice")) {
+			if(member.getLoginId().equals("baobab612") && member.getName().equals("방혜성") == false) {
+				
+				model.addAttribute("msg", "관리자만 공지사항에 게시글을 등록할 수 있습니다.");
+				model.addAttribute("replaceUri", "/usr/article-notice/list");
+				
+				return "common/redirect";
+			}
+		}
+		
+		req.setAttribute("board", board);
 		
 		return String.format("usr/article/write");
 	}
 
-	@RequestMapping("usr/article/doWrite")
-	public String doWrite(@RequestParam Map<String, Object> param, Model model, HttpServletRequest req) {
+	@RequestMapping("usr/article-{boardCode}/doWrite")
+	public String doWrite(@RequestParam Map<String, Object> param, Model model, HttpServletRequest req,String boardCode) {
 		int loginedMemberNum = (int) req.getAttribute("loginedMemberNum");
-
+		
+		Member member = memberService.getMemberByNum(loginedMemberNum);
+		
 		param.put("memberNum", loginedMemberNum);
+		
 		int num = articleService.doWriteArticleByNum(param);
 
+		if(boardCode.equals("notice")) {
+			if((member.getLoginId().equals("baobab612") && member.getName().equals("방혜성")) == false) {
+				
+				model.addAttribute("msg", "관리자만 공지사항에 게시글을 등록할 수 있습니다.");
+				model.addAttribute("replaceUri", "/usr/article-notice/list");
+				
+				return "common/redirect";
+			}
+		}
+		
 		model.addAttribute("msg", num + "번 글을 작성하였습니다");
-		model.addAttribute("replaceUri", "/usr/article/list");
+		model.addAttribute("replaceUri", "/usr/article-" + boardCode +  "/list");
 
 		return "common/redirect";
 	}
-	
 }

@@ -9,6 +9,8 @@
 		<a href="./list">목록</a>
 		
 		<form action="doWrite" method="POST">
+			<input type="hidden" name="boardNum" value="${board.num}" />
+			<input type="hidden" name="boardCode" value="${board.code}" />
 			<div>
 				제목 : <input type="text" maxlength="30" name="title" />
 			</div>

@@ -11,6 +11,7 @@
 
 		<form action="doModify" method="POST">
 		<input type="hidden" name="listUrl" value="${listUrl}" />
+		<input type="hidden" name="boardCode" value="${board.code}" />
 		
 			<input type="hidden" name="num" value="${article.num}"/>
 			

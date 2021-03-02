@@ -57,7 +57,7 @@ public class ArticleService {
 
 	public Article getArticleByNum(Member actorMember, int num) {
 		Article article = articleDao.getArticleByNum(num);
-		System.out.println("article= " + article);
+		
 		if(article.getExtra() == null) {
 			article.setExtra(new HashMap<>());
 		}
@@ -99,7 +99,6 @@ public class ArticleService {
 
 	public Article getArticleByNumForReply(Member actorMember, int num, int replyNum) {
 		Article article = articleDao.getArticleByNumForReply(num,replyNum);
-		System.out.println("article= " + article);
 		if(article.getExtra() == null) {
 			article.setExtra(new HashMap<>());
 		}

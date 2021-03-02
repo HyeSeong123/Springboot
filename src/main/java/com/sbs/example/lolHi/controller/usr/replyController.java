@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.sbs.example.lolHi.Service.ReplyService;
 import com.sbs.example.lolHi.dto.Member;
 import com.sbs.example.lolHi.dto.Reply;
+import com.sbs.example.lolHi.util.Util;
 
 @Controller
 public class replyController {
@@ -34,7 +35,7 @@ public class replyController {
 	}
 	
 	@RequestMapping("/usr/reply/doDelete")
-	public String doDelete(Model model, int num, HttpServletRequest req, String replaceUrl) {
+	public String doDelete(Model model, int num, HttpServletRequest req, String replaceUrl, String boardCode) {
 		Member loginedMember = (Member) req.getAttribute("loginedMember");
 		int loginedMemberNum = (int) req.getAttribute("loginedMemberNum");
 		
@@ -45,10 +46,12 @@ public class replyController {
 		}
 		String listUrl = req.getParameter("replaceUrl");
 		
-		if ((boolean) reply.getExtra().get("actorCanModify") == false) {
-			model.addAttribute("msg", "삭제 권한이 없습니다.");
-			model.addAttribute("replaceUri", "/usr/article/detail?num=" + reply.getRelNum() + "&" + listUrl);
-			return "common/redirect";
+		if(loginedMember.getLoginId().equals("baobab612") == false) {
+			if ((boolean) reply.getExtra().get("actorCanModify") == false) {
+				model.addAttribute("msg", "삭제 권한이 없습니다.");
+				model.addAttribute("replaceUri", "/usr/article-"+ boardCode +"/detail?num=" + reply.getRelNum() + "&" + listUrl);
+				return "common/redirect";
+			}
 		}
 		
 		replyService.doDelete(num);
@@ -60,11 +63,15 @@ public class replyController {
 	}
 	
 	@RequestMapping("/usr/reply/doModify")
-	public String doModify(Model model, @RequestParam Map<String, Object> param, int replyNum, int num, HttpServletRequest req,String replaceUrl) {
+	public String doModify(Model model, @RequestParam Map<String, Object> param, int replyNum, int num,
+				HttpServletRequest req,	String replaceUrl) {
+		
 		Member loginedMember = (Member) req.getAttribute("loginedMember");
 		int loginedMemberNum = (int) req.getAttribute("loginedMemberNum");
 		
 		Reply reply = replyService.getArticleForNum(replyNum, loginedMember);
+		
+		String boardCode = Util.getAsStr(req.getAttribute("boardCode"), null);
 		
 		if(replaceUrl == null || replaceUrl.length() == 0) {
 			replaceUrl = String.format("/usr/article/detail?num=" + reply.getRelNum());
@@ -73,7 +80,7 @@ public class replyController {
 				
 		if ((boolean) reply.getExtra().get("actorCanModify") == false) {
 			model.addAttribute("msg", "수정 권한이 없습니다.");
-			model.addAttribute("replaceUri", "/usr/article/detail?num=" + reply.getRelNum() + "&" + listUrl);
+			model.addAttribute("replaceUri", "/usr/article-" + boardCode + "/detail?num=" + reply.getRelNum() + "&" + listUrl);
 			return "common/redirect";
 		}
 		

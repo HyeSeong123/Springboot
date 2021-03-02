@@ -6,18 +6,18 @@
 <%@ include file="../part/header.jspf"%>
 
 	<h1>게시물 상세화면</h1>
-		
+		${board.code}
 			<a href="${listUrl}">목록</a>
-			
-		<c:if test="${article.extra.actorCanDelete}">
+				  		
+		<c:if test="${article.extra.actorCanDelete || loginedMember.loginId eq 'baobab612'}">
 			<a onclick="if( confirm('삭제하시겠습니까?') == false) return false;" href="./doDelete?num=${article.num}&listUrl=${saveUrl}">삭제</a>
 		</c:if>
-		
+
 		<c:if test="${article.extra.actorCanModify}">
-			<a href="./modify?num=${article.num}&listUrl=${saveUrl}"> 수정</a>
+			<a href="./modify?num=${article.num}&boardCode=${board.code}&listUrl=${saveUrl}"> 수정</a>
 		</c:if>
 		
-		<h1>${article.extra.board}</h1>
+		<h2>${article.extra.board}</h2>
 		<div> 게시물 번호 : ${article.num}</div>
 		<div> 게시물 작성자 : ${article.extra.writer}</div>
 		<div> 게시물 작성일 : ${article.regDate}</div>
@@ -28,13 +28,13 @@
 			게시물 제목 : ${article.title}
 			<c:if test="${availAbleLike}">
 				<a onclick="if ( confirm('추천하시겠습니까?') == false ) { return false; }" href="
-					../like/doLike?num=${article.num}&memberNum=${loginedMemberNum}&relNum=${article.num}&relTypeCode=article&listUrl=${saveUrl}">
+					../like/doLike?num=${article.num}&memberNum=${loginedMemberNum}&boardCode=${board.code}&relNum=${article.num}&relTypeCode=article&listUrl=${saveUrl}">
 					좋아요</a>
 			</c:if>
 			
 			<c:if test="${availAbleLike == false}">
 				<a onclick="if ( confirm('추천 취소 하시겠습니까?') == false ) { return false; }" href="
-					../like/doDislike?num=${article.num}&memberNum=${loginedMemberNum}&relNum=${article.num}&relTypeCode=article&listUrl=${saveUrl}">
+					../like/doDislike?num=${article.num}&memberNum=${loginedMemberNum}&boardCode=${board.code}&relNum=${article.num}&relTypeCode=article&listUrl=${saveUrl}">
 					좋아요 취소</a>
 			</c:if>
 			<!--  <a onclick="if ( confirm('추천하시겠습니까?') == false ) { return false; }" href="../disLike?num=${article.num}">싫어요</a>  -->
@@ -70,6 +70,7 @@
 		
 		<form action="/usr/reply/doWrite" method= "POST" onsubmit="writeReplyFormSubmit(this); return false;">
 			<input type="hidden" name="replaceUrl" value="${currentUri}" />
+			<input type="hidden" name="boardCode" value="${board.code}" />
 			<input type="hidden" name="memberNum" value="${loginedMemberNum}"/>
 			<input type="hidden" name="relNum" value="${article.num}"/>
 			<input type="hidden" name="relTypeCode" value="article"/>
@@ -104,9 +105,10 @@
 					
 				</style>
 				
+				
 				<c:if test="${reply.extra.actorCanDelete}">
-				<span class="modify modify${reply.num}">수정</span>
-				<span class="modify_toggle modify_toggle${reply.num}">
+					<span class="modify modify${reply.num}">수정</span>
+					<span class="modify_toggle modify_toggle${reply.num}">
 					<form action="/usr/reply/doModify">
 						<input type="hidden" name="replaceUrl" value="${currentUri}" />
 						<input type="hidden" name="memberNum" value="${loginedMemberNum}"/>
@@ -121,10 +123,24 @@
 					
 				</c:if>
 				
-				<c:if test="${reply.extra.actorCanModify}">
-				</span>
-				<a onclick="if( confirm('댓글을 삭제하시겠습니까?') == false) return false;" 
-							href="../reply/doDelete?num=${reply.num}&replaceUrl=${encodedCurrentUri}">삭제</a>
+				<span class="modify modify${reply.num}">수정</span>
+					<span class="modify_toggle modify_toggle${reply.num}">
+					<form action="/usr/reply/doModify">
+						<input type="hidden" name="replaceUrl" value="${currentUri}" />
+						<input type="hidden" name="memberNum" value="${loginedMemberNum}"/>
+						<input type="hidden" name="relNum" value="${article.num}"/>
+						<input type="hidden" name="relTypeCode" value="article"/>
+						<input type="hidden" name="num" value="${article.num}"/>
+						<input type="hidden" name="replyNum" value="${reply.num}"/>
+						
+						<textarea name="body" rows="5"></textarea>
+						<input type="submit" value="수정"/>
+					</form>
+				
+				<c:if test="${reply.extra.actorCanModify || loginedMember.loginId eq 'baobab612'}">
+					</span>
+					<a onclick="if( confirm('댓글을 삭제하시겠습니까?') == false) return false;" 
+								href="../reply/doDelete?num=${reply.num}&boardCode=${board.code}&replaceUrl=${encodedCurrentUri}">삭제</a>
 				</c:if>
 				
 				<hr />

@@ -94,7 +94,7 @@
 			<input type="submit" value="변경" />
 		</div>
 		
-		<a href="../article/main">홈으로</a>
+		<a href="../home/main">홈으로</a>
 	</form>
 
 </div>

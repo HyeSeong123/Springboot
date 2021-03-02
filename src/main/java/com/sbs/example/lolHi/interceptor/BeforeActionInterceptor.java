@@ -43,6 +43,13 @@ public class BeforeActionInterceptor implements HandlerInterceptor {
 			loginedMember = memberService.getMemberByNum(loginedMemberNum);
 		}
 
+		if (session.getAttribute("listUrl") != null) {
+			String listUrl = request.getParameter("listUrl");
+
+			request.setAttribute("listUrl", listUrl);
+		}
+
+		
 		List<Board> boards = articleService.getBoards();
 		
 		request.setAttribute("isAjax", isAjax);

@@ -14,21 +14,27 @@
 
 	<div>
 		[${article.extra.actorCanDelete}]
+		
+		<c:if test="${loginedMember.adminLevel == 10}">
+			<span style="color:red">[관리자]</span>
+		</c:if>
+		
 		<c:if test="${isLogined}">
 			${loginedMember.loginId} (${loginedMemberNum})님 접속중
 		</c:if>
+		
 		<a href="../home/main">홈으로</a>
 	</div>
 	
 	
 	<c:if test="${not isLogined}">
 		<a href="../member/join">회원 가입</a>
-		<a href="../member/login">로그인</a>
+		<a href="../member/login?listUrl=${encodedCurrentUri}">로그인</a>
 	</c:if>
 	
 	<c:if test="${isLogined}">
 		<a href="../member/showInforMe">내 정보</a>
-		<a href="../member/doLogout">로그아웃</a>
+		<a href="../member/doLogout?listUrl=${encodedCurrentUri}">로그아웃</a>
 	</c:if>
 	
 	<div>

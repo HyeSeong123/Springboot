@@ -95,7 +95,8 @@
 			updateDate = NOW(),
 			memberNum = #{memberNum},
 			title = #{title},
-			body = #{body}
+			body = #{body},
+			boardNum = #{boardNum}
 		</set>
 	</insert>
 	

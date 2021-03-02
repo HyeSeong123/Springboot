@@ -1,5 +1,6 @@
 package com.sbs.example.lolHi.controller.usr;
 
+import java.net.http.HttpRequest;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,7 +27,7 @@ public class MemberController {
 
 		if (loginedMemberNum > 0) {
 			model.addAttribute("msg", "로그아웃 후 이용해주세요.");
-			model.addAttribute("replaceUri", "/usr/article/list");
+			model.addAttribute("replaceUri", "/usr/article/main");
 			return "common/redirect";
 		}
 
@@ -39,7 +40,7 @@ public class MemberController {
 
 		if (loginedMemberNum > 0) {
 			model.addAttribute("msg", "로그아웃 후 이용해주세요.");
-			model.addAttribute("replaceUri", "/usr/article/list");
+			model.addAttribute("replaceUri", "/usr/article/main");
 			return "common/redirect";
 		}
 
@@ -68,12 +69,22 @@ public class MemberController {
 	}
 
 	@RequestMapping("/usr/member/login")
-	public String showLogin(HttpServletRequest req, Model model) {
+	public String showLogin(HttpServletRequest req, Model model,String listUrl) {
+		if(listUrl == null) {
+			listUrl = "/usr/home/main";
+		}
+		
 		int loginedMemberNum = (int) req.getAttribute("loginedMemberNum");
-
+		
+		if(listUrl != null) {
+			String encodedListUrl = Util.getUriEncoded(listUrl);
+		}
+		
+		req.setAttribute("encodedPreUrl", listUrl);
+		
 		if (loginedMemberNum > 0) {
 			model.addAttribute("msg", "로그아웃 후 이용해주세요.");
-			model.addAttribute("replaceUri", "/usr/article/list");
+			model.addAttribute("replaceUri", "../.." + listUrl);
 			return "common/redirect";
 		}
 
@@ -81,14 +92,17 @@ public class MemberController {
 	}
 
 	@RequestMapping("/usr/member/doLogin")
-	public String doLogin(String loginId, String loginPw, HttpSession session , Model model) {
+	public String doLogin(String loginId, String loginPw, HttpSession session , Model model, HttpServletRequest req, String listUrl) {
+		if(listUrl == null) {
+			listUrl = "/home/main";
+		}
 		if (loginId.length() == 0) {
 			model.addAttribute("msg", "로그인 아이디를 입력해주세요");
 			model.addAttribute("historyBack");
 
 			return "common/redirect";
 		}
-
+		
 		if (loginPw.length() == 0) {
 			model.addAttribute("msg", "로그인 패스워드를 입력해주세요");
 			model.addAttribute("historyBack");
@@ -100,32 +114,32 @@ public class MemberController {
 
 		if (member == null) {
 			model.addAttribute("msg", "존재하지 않는 아이디 입니다.");
-			model.addAttribute("replaceUri", "/usr/member/login");
+			model.addAttribute("replaceUri", "./login" + listUrl);
 
 			return "common/redirect";
 		}
 
 		if (member.getLoginPw().equals(loginPw) == false) {
 			model.addAttribute("msg", "아이디와 패스워드가 일치하지 않습니다.");
-			model.addAttribute("replaceUri", "/usr/member/login");
+			model.addAttribute("replaceUri", "./login" + listUrl);
 
 			return "common/redirect";
 		}
 
 		session.setAttribute("loginedMemberNum", member.getNum());
-
+		
 		model.addAttribute("msg", member.getLoginId() + "님의 로그인을 환영합니다.");
-		model.addAttribute("replaceUri", "/usr/article/list");
+		model.addAttribute("replaceUri", "../.." + listUrl);
 
 		return "common/redirect";
 	}
 
 	@RequestMapping("/usr/member/doLogout")
-	public String doLogout(HttpSession session, Model model) {
+	public String doLogout(HttpSession session, Model model,String listUrl) {
 		session.setAttribute("loginedMemberNum", 0);
 
 		model.addAttribute("msg", "로그아웃 되었습니다.");
-		model.addAttribute("replaceUri", "/usr/article/list");
+		model.addAttribute("replaceUri", listUrl);
 
 		return "common/redirect";
 	}
@@ -153,7 +167,7 @@ public class MemberController {
 		memberService.doModify(param);
 		
 		model.addAttribute("msg", "수정되었습니다.");
-		model.addAttribute("replaceUri", "/usr/article/list");
+		model.addAttribute("replaceUri", "/usr/home/main");
 
 		return "common/redirect";
 	}

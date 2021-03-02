@@ -11,11 +11,11 @@
 	<h1>게시판 이름 : ${board.name}</h1>
 	
 	<h3>게시물 수 : ${totalCount}</h3>
-	<a href="./write">글 작성</a>
+	<a href="./write?listUrl=${encodedCurrentUri}&boardCode=${board.code}">글 작성</a>
 	
 	<hr></hr>
 	<c:forEach items="${articles}" var="article">
-	<c:set var="detailUrl" value="/usr/article/detail?num=${article.num}&listUrl=${encodedCurrentUri}" />
+	<c:set var="detailUrl" value="/usr/article-${board.code}/detail?num=${article.num}&listUrl=${encodedCurrentUri}" />
 	<c:set var="count" value= "0" />
 	
 		<span> 게시물 번호 : ${article.num}</span>
