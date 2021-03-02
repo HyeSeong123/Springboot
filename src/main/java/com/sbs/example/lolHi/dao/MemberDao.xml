@@ -10,10 +10,10 @@
 			regDate = NOW(),
 			updateDate = NOW(),
 			loginId = #{loginId},
-			loginPw =
-			#{loginPw},
+			loginPw = #{loginPw},
 			`name` = #{name},
 			nickname = #{nickname},
+			hpNum = #{hpNum},
 			email = #{email},
 		</set>
 	</insert>

@@ -43,6 +43,8 @@ CREATE TABLE `member`(
     adminLevel TINYINT(1) UNSIGNED NOT NULL DEFAULT 2 COMMENT '0=탈퇴/1=로그인정지/2=일반/3=인증된,4=관리자'    
 );
 
+ALTER TABLE `member` ADD COLUMN hpNum CHAR(15) NOT NULL AFTER email
+
 # 멤버 번호 재지정
 ALTER TABLE `member` AUTO_INCREMENT = 2;
 
@@ -127,3 +129,4 @@ SELECT COUNT(*)
     INNER JOIN board
     ON article.boardNum = board.num
     AND board.num = 2
+    

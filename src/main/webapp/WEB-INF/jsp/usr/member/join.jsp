@@ -60,12 +60,28 @@
 				form.nickname.focus();
 				return;
 			}
+
+			form.hpNum.value = form.hpNum.value.trim();
 			
+			if ( form.hpNum.value.length == 0 ){
+				alert('휴대전화 번호를 입력해주세요');
+				form.hpNum.focus();
+				return;
+			}
+
+			form.email.value = form.email.value.trim();
+			
+			if ( form.email.value.length == 0 ){
+				alert('이메일을 입력해주세요');
+				form.email.focus();
+				return;
+			}
 			form.submit();
 			doJoinForm_submited = true;
 		}
 	</script>
 	<div>
+	
 		<form action="doJoin" method="POST" onsubmit="joinFormSubmit(this); return false;">
 
 			<div>
@@ -89,15 +105,11 @@
 			<div>
 				닉네임 : <input type="text" name="nickname" placeholder="닉네임을 입력해주세요" />
 			</div>
-		<!--  	
-			<div>
-				전화번호 : <input type="text" name="telNum" placeholder="번호를 입력해주세요" />
-			</div>
-
+			
 			<div>
 				핸드폰 : <input type="text" name=hpNum placeholder="휴대전화 번호를 입력해주세요" />
 			</div>
- 														-->
+
 			<div>
 				이메일 : <input type="email" name=email placeholder="이메일을 입력해주세요" />
 			</div>
@@ -105,7 +117,7 @@
 			<div>
 				<input type="submit" value="가입" />
 			</div>
-
 		</form>
+		
 	</div>
 <%@ include file="../part/footer.jspf"%>

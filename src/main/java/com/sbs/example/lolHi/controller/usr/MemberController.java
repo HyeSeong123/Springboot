@@ -133,7 +133,11 @@ public class MemberController {
 
 		return "common/redirect";
 	}
+	@RequestMapping("/usr/member/findLoginId")
+	public String showFindLoginId(HttpServletRequest req, Model model,String listUrl) {
 
+		return "usr/member/findLoginId";
+	}
 	@RequestMapping("/usr/member/doLogout")
 	public String doLogout(HttpSession session, Model model,String listUrl) {
 		session.setAttribute("loginedMemberNum", 0);
