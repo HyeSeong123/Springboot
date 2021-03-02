@@ -116,18 +116,20 @@ CREATE TABLE `member` (
   `name` char(50) NOT NULL,
   `nickname` char(50) NOT NULL,
   `email` varchar(100) NOT NULL,
+  `hpNum` char(15) NOT NULL,
   `loginId` char(50) NOT NULL,
   `loginPw` varchar(200) NOT NULL,
   `adminLevel` tinyint(1) unsigned NOT NULL DEFAULT 2 COMMENT '0=탈퇴/1=로그인정지/2=일반/3=인증된,4=관리자',
   PRIMARY KEY (`num`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `member` */
 
-insert  into `member`(`num`,`regDate`,`updateDate`,`name`,`nickname`,`email`,`loginId`,`loginPw`,`adminLevel`) values 
-(1,'2021-02-19 22:35:19','2021-03-02 15:47:07','가나다라11','banggu1997','banggu1997@gmail.com','test','11115',2),
-(2,'2021-02-20 13:14:12','2021-03-02 16:14:50','방혜성','방혜성','bmg4211@naver.com','baobab612','1111',10),
-(3,'2021-03-02 17:41:59','2021-03-02 17:41:59','방혜성','bababam','banggu1997@naver.com','test2','1111',2);
+insert  into `member`(`num`,`regDate`,`updateDate`,`name`,`nickname`,`email`,`hpNum`,`loginId`,`loginPw`,`adminLevel`) values 
+(1,'2021-02-19 22:35:19','2021-03-02 15:47:07','가나다라11','banggu1997','banggu1997@gmail.com','010-2010-2020','test','11115',2),
+(2,'2021-02-20 13:14:12','2021-03-02 16:14:50','방혜성','방혜성','bmg4211@naver.com','010-2010-2020','baobab612','1111',10),
+(3,'2021-03-02 17:41:59','2021-03-02 17:41:59','방혜성','bababam','banggu1997@naver.com','010-2010-2020','test2','1111',2),
+(4,'2021-03-02 21:09:37','2021-03-02 21:09:37','방방','방혜성','bmg4211@naver.com','010-8370-0420','banggu1997','1111',2);
 
 /*Table structure for table `reply` */
 
@@ -160,7 +162,7 @@ insert  into `reply`(`num`,`regDate`,`updateDate`,`memberNum`,`relNum`,`relTypeC
 (19,'2021-02-25 10:56:40','2021-02-25 10:56:40',2,34,'article','12232'),
 (20,'2021-02-25 13:17:43','2021-02-25 13:17:43',1,35,'article','가나다라암나만마'),
 (24,'2021-03-02 17:35:33','2021-03-02 17:35:48',2,36,'article','233'),
-(25,'2021-03-02 17:43:46','2021-03-02 17:43:46',3,41,'article','asd');
+(25,'2021-03-02 17:43:46','2021-03-02 20:42:28',3,41,'article','2131');
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

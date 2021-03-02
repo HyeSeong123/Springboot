@@ -45,6 +45,9 @@ CREATE TABLE `member`(
 
 ALTER TABLE `member` ADD COLUMN hpNum CHAR(15) NOT NULL AFTER email
 
+UPDATE `member`
+SET hpNum = '010-2010-2020'
+WHERE hpNum = ''
 # 멤버 번호 재지정
 ALTER TABLE `member` AUTO_INCREMENT = 2;
 
