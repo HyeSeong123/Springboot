@@ -30,3 +30,9 @@
 		<a href="../member/showInforMe">내 정보</a>
 		<a href="../member/doLogout">로그아웃</a>
 	</c:if>
+	
+	<div>
+		<c:forEach items="${boards}" var="board">
+			<a href="/usr/article-${board.code}/list">${board.name}</a>
+		</c:forEach>
+	</div>

@@ -8,6 +8,8 @@
 	
 
 	<h1>게시물 리스트</h1>
+	<h1>게시판 이름 : ${board.name}</h1>
+	
 	<h3>게시물 수 : ${totalCount}</h3>
 	<a href="./write">글 작성</a>
 	

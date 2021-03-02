@@ -89,6 +89,8 @@ INSERT INTO board
     `name` = '자유게시판',
     `code` = 'free'
 
+/* 기존 게시판 글 자유게시판으로 전부 이전 */
+
 ALTER TABLE article DROP COLUMN replyNum
 
 SELECT A.*,
@@ -114,3 +116,11 @@ M.name AS extra__writer,
 		WHERE 1
 		AND A.num = 35
 		GROUP BY A.num
+
+/* 게시판에 맞는 게시물 갯수 찾기 */
+
+SELECT COUNT(*)
+    FROM article
+    INNER JOIN board
+    ON article.boardNum = board.num
+    AND board.num = 2

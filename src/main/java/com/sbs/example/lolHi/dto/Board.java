@@ -1,4 +1,4 @@
-package com.sbs.example.lolHi.controller.dto;
+package com.sbs.example.lolHi.dto;
 
 import java.util.Map;
 

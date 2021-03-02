@@ -16,7 +16,8 @@
 		<c:if test="${article.extra.actorCanModify}">
 			<a href="./modify?num=${article.num}&listUrl=${saveUrl}"> 수정</a>
 		</c:if>
-		${board.name}
+		
+		<h1>${article.extra.board}</h1>
 		<div> 게시물 번호 : ${article.num}</div>
 		<div> 게시물 작성자 : ${article.extra.writer}</div>
 		<div> 게시물 작성일 : ${article.regDate}</div>

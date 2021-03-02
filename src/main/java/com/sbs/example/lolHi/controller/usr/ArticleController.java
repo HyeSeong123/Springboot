@@ -8,14 +8,15 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.sbs.example.lolHi.Service.ArticleService;
 import com.sbs.example.lolHi.Service.LikeService;
 import com.sbs.example.lolHi.Service.ReplyService;
-import com.sbs.example.lolHi.controller.dto.Board;
 import com.sbs.example.lolHi.dto.Article;
+import com.sbs.example.lolHi.dto.Board;
 import com.sbs.example.lolHi.dto.Like;
 import com.sbs.example.lolHi.dto.Member;
 import com.sbs.example.lolHi.dto.Reply;
@@ -39,14 +40,24 @@ public class ArticleController {
 	}
 
 	@RequestMapping("/usr/article-{boardCode}/list")
-	public String showList(Model model, @RequestParam Map<String, Object> param, HttpServletRequest req, String boardCode) {
-		Member loginedMember = (Member) req.getAttribute("loginedMember");
-		List<Article> articles = articleService.getArticles(loginedMember, param);
-		List<Reply> replies = replyService.getRepliesNum("article", loginedMember);
+	public String showList(Model model, @RequestParam Map<String, Object> param,@PathVariable("boardCode") String boardCode, HttpServletRequest req) {
 		
 		Board board = articleService.getBoardByCode(boardCode);
 		
-		System.out.println("boardCode : " + boardCode);
+		List<Board> boards = articleService.getBoards();
+		
+		if(board == null) {
+			model.addAttribute("msg" , "존재하지 않는 게시판 입니다.");
+			model.addAttribute("historyBack", true);
+			
+			return "common/redirect";
+		}
+		
+		param.put("boardCode", boardCode);
+		
+		Member loginedMember = (Member) req.getAttribute("loginedMember");
+		List<Article> articles = articleService.getArticles(loginedMember, param);
+		List<Reply> replies = replyService.getRepliesNum("article", loginedMember);	
 		
 		int totalCount = articleService.totalCount(param);
 		int itemsCountInAPage = 20;
@@ -65,8 +76,9 @@ public class ArticleController {
 		}
 
 		param.put("itemsCountInAPage", itemsCountInAPage);
-
+		
 		model.addAttribute("board", board);
+		model.addAttribute("boards", boards);
 		model.addAttribute("totalCount", totalCount);
 		model.addAttribute("page", page);
 		model.addAttribute("totalPage", totalPage);
@@ -109,7 +121,7 @@ public class ArticleController {
 		if (listUrl == null) {
 			listUrl = "article/ust/list";
 		}
-
+		
 		model.addAttribute("availAbleLike", availAbleLike);
 		model.addAttribute("article", article);
 		model.addAttribute("replies", replies);
@@ -189,7 +201,9 @@ public class ArticleController {
 	@RequestMapping("/usr/article/write")
 	public String showWrite(HttpServletRequest req, Model model) {
 		int loginedMemberNum = (int) req.getAttribute("loginedMemberNum");
-
+		
+		
+		
 		return String.format("usr/article/write");
 	}
 
