@@ -90,6 +90,9 @@ INSERT INTO board
     `code` = 'free'
 
 /* 기존 게시판 글 자유게시판으로 전부 이전 */
+UPDATE article
+SET boardNum = 2
+WHERE boardNum =1
 
 ALTER TABLE article DROP COLUMN replyNum
 
