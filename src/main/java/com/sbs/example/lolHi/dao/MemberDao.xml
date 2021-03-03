@@ -24,6 +24,12 @@
 		WHERE loginId = #{loginId}
 	</select>
 
+	<select id="getMemberByEmail" resultType="Member">
+		SELECT *
+		FROM `member`
+		WHERE email = #{email}
+	</select>
+	
 	<select id="getMemberByNum" resultType="Member">
 		SELECT *
 		FROM `member`
@@ -50,9 +56,24 @@
 			<if test="email != null">
 				`email` = #{email},
 			</if>
-			
 		</set>
 		WHERE num = #{num}
 	</update>
+	
+	<select id="getMemberByNameAndEmail" resultType="Member">
+		SELECT *
+		FROM `member`
+		WHERE 1
+		AND name = #{name}
+		AND email = #{email}
+	</select>
+	
+	<select id="getMemberByLoginIdAndEmail" resultType="Member">
+		SELECT *
+		FROM `member`
+		WHERE 1
+		AND loginId = #{loginId}
+		AND email = #{email}
+	</select>
 	
 </mapper>

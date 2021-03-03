@@ -2,25 +2,25 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-<c:set var="title" value="아이디 찾기" />
+<c:set var="title" value="패스워드 찾기" />
 <%@ include file="../part/header.jspf"%>
 
 	<h1>${title}</h1>
 	
 	<script>
-		function findLoginFormSubmit(form){
-			let doFindLoginForm_submited = false;
+		function findPasswordFormSubmit(form){
+			let doFindPasswordForm_submited = false;
 			
-			if (doFindLoginForm_submited) {
+			if (doFindPasswordForm_submited) {
 					alert('처리중입니다.');
 					return;
 				}
 				
-			form.name.value = form.name.value.trim();
+			form.loginId.value = form.loginId.value.trim();
 			
-			if ( form.name.value.length == 0 ){
-				alert('이름을 입력해주세요');
-				form.name.focus();
+			if ( form.loginId.value.length == 0 ){
+				alert('아이디를 입력해주세요');
+				form.loginId.focus();
 				return;
 			}
 			
@@ -33,15 +33,15 @@
 			}
 			
 			form.submit();
-			doFindLoginForm_submited = true;
+			doFindPasswordForm_submited = true;
 		}
 	</script>
 	<div>
 
-		<form action="doFindLoginId" method="POST" onsubmit="findLoginFormSubmit(this); return false;">
+		<form action="doFindPassword" method="POST" onsubmit="findPasswordFormSubmit(this); return false;">
 			
 			<div>
-				이름 : <input type="text" name="name" placeholder="이름을 입력해주세요" />
+				아이디 : <input type="text" name="loginId" placeholder="아이디를 입력해주세요" />
 			</div>
 
 			<div>
@@ -49,7 +49,7 @@
 			</div>
 
 			<div>
-				<input type="submit" value="아이디 찾기" />
+				<input type="submit" value="패스워드 찾기" />
 			</div>
 
 		</form>

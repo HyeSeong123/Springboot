@@ -26,8 +26,6 @@ public class NeedToLoginInterceptor implements HandlerInterceptor {
 			if (isAjax == false) {
 				String a = request.getParameter("listUrl");
 				
-				System.out.println("listUrl = " + a);
-				
 				response.setContentType("text/html; charset=UTF-8");
 				response.getWriter().append("<script>");
 				response.getWriter().append("alert('로그인 후 이용해주세요.');");

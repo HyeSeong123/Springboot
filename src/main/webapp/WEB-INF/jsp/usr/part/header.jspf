@@ -29,8 +29,9 @@
 	
 	<c:if test="${not isLogined}">
 		<a href="../member/join">회원 가입</a>
-		<a href="../member/findLoginId">아이디 찾기</a>
 		<a href="../member/login?listUrl=${encodedCurrentUri}">로그인</a>
+		<a href="../member/findLoginId">아이디 찾기</a>
+		<a href="../member/findPassword">패스워드 찾기</a>
 	</c:if>
 	
 	<c:if test="${isLogined}">
