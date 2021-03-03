@@ -63,6 +63,30 @@ insert  into `article`(`num`,`regDate`,`updateDate`,`memberNum`,`boardNum`,`titl
 (36,'2021-03-02 15:38:48','2021-03-02 15:38:48',1,2,'새 게시글1','새 게시글1'),
 (41,'2021-03-02 17:08:37','2021-03-02 17:15:44',2,2,'새 게시글2','새 게시글2');
 
+/*Table structure for table `attr` */
+
+DROP TABLE IF EXISTS `attr`;
+
+CREATE TABLE `attr` (
+  `num` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `regDate` datetime NOT NULL,
+  `updateDate` datetime NOT NULL,
+  `relTypeCode` char(20) NOT NULL,
+  `relNum` int(10) unsigned NOT NULL,
+  `typeCode` char(30) NOT NULL,
+  `type2Code` char(30) NOT NULL,
+  `value` text NOT NULL,
+  `expireDate` datetime DEFAULT NULL,
+  PRIMARY KEY (`num`),
+  UNIQUE KEY `relTypeCode` (`relTypeCode`,`relNum`,`typeCode`,`type2Code`),
+  KEY `relTypeCode_2` (`relTypeCode`,`typeCode`,`type2Code`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
+
+/*Data for the table `attr` */
+
+insert  into `attr`(`num`,`regDate`,`updateDate`,`relTypeCode`,`relNum`,`typeCode`,`type2Code`,`value`,`expireDate`) values 
+(1,'2021-03-03 17:36:25','2021-03-03 17:36:45','member',1,'extra','modifyPrivateAuthCode','31cf0f50-d2a5-4502-a2ee-c0e9412af9d6','2021-03-03 18:36:45');
+
 /*Table structure for table `board` */
 
 DROP TABLE IF EXISTS `board`;
@@ -121,15 +145,15 @@ CREATE TABLE `member` (
   `loginPw` varchar(200) NOT NULL,
   `adminLevel` tinyint(1) unsigned NOT NULL DEFAULT 2 COMMENT '0=탈퇴/1=로그인정지/2=일반/3=인증된,4=관리자',
   PRIMARY KEY (`num`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `member` */
 
 insert  into `member`(`num`,`regDate`,`updateDate`,`name`,`nickname`,`email`,`hpNum`,`loginId`,`loginPw`,`adminLevel`) values 
-(1,'2021-02-19 22:35:19','2021-03-02 15:47:07','가나다라11','banggu1997','banggu1997@gmail.com','010-2010-2020','test','11115',2),
-(2,'2021-02-20 13:14:12','2021-03-02 16:14:50','방혜성','방혜성','bmg4211@naver.com','010-2010-2020','baobab612','1111',10),
-(3,'2021-03-02 17:41:59','2021-03-02 17:41:59','방혜성','bababam','banggu1997@naver.com','010-2010-2020','test2','1111',2),
-(4,'2021-03-02 21:09:37','2021-03-02 21:09:37','방방','방혜성','bmg4211@naver.com','010-8370-0420','banggu1997','1111',2);
+(1,'2021-02-19 22:35:19','2021-03-03 17:33:46','가나다라11','banggu1997','banggu1997@gmail.com','010-2010-2020','test','e0f8aece47e9bfb35bb8c9f09efb3ac062174eefd68b8c11a1b760c8291eb794',2),
+(2,'2021-02-20 13:14:12','2021-03-02 16:14:50','방혜성','방혜성','bmg4211@naver.com','010-2010-2020','baobab612','0ffe1abd1a08215353c233d6e009613e95eec4253832a761af28ff37ac5a150c',10),
+(3,'2021-03-02 17:41:59','2021-03-02 17:41:59','방혜성','bababam','banggu1997@naver.com','010-2010-2020','test2','0ffe1abd1a08215353c233d6e009613e95eec4253832a761af28ff37ac5a150c',2),
+(6,'2021-03-03 11:40:47','2021-03-03 11:40:47','방혜성','baobab612','baobab0612@naver.com','010-8370-0420','emailTest','0ffe1abd1a08215353c233d6e009613e95eec4253832a761af28ff37ac5a150c',2);
 
 /*Table structure for table `reply` */
 

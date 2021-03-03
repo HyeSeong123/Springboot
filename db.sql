@@ -50,6 +50,9 @@ SET hpNum = '010-2010-2020'
 WHERE hpNum = ''
 # 멤버 번호 재지정
 ALTER TABLE `member` AUTO_INCREMENT = 2;
+# 멤버 패스워드 암호화
+UPDATE `member`
+SET loginPw = SHA2(loginPw, 256);
 
 DROP TABLE reply
 CREATE TABLE reply(
@@ -94,6 +97,28 @@ INSERT INTO board
     `name` = '자유게시판',
     `code` = 'free'
 
+DROP TABLE attr
+CREATE TABLE attr(
+    num INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    regDate DATETIME NOT NULL,
+    updateDate DATETIME NOT NULL,
+    `relTypeCode` CHAR(20) NOT NULL,
+    `relNum` INT(10) UNSIGNED NOT NULL,
+    `typeCode` CHAR(30) NOT NULL,
+    `type2Code` CHAR(30) NOT NULL,
+    `value` TEXT NOT NULL
+);
+
+# attr 유니크 인덱스 걸기
+ALTER TABLE `attr` DROP INDEX relTypeCode;
+ALTER TABLE `attr` ADD UNIQUE INDEX (`relTypeCode`, `relNum`, `typeCode`, `type2Code`);  
+## 변수찾는 속도 최적화
+ALTER TABLE `attr` ADD INDEX(`relTypeCode`,`typeCode`, `type2Code`);
+
+# attr에 만료날짜 추가
+ALTER TABLE `attr` ADD COLUMN `expireDate` DATETIME NULL AFTER `value`;
+
+
 /* 기존 게시판 글 자유게시판으로 전부 이전 */
 UPDATE article
 SET boardNum = 2
@@ -126,10 +151,15 @@ M.name AS extra__writer,
 		GROUP BY A.num
 
 /* 게시판에 맞는 게시물 갯수 찾기 */
-
 SELECT COUNT(*)
     FROM article
     INNER JOIN board
     ON article.boardNum = board.num
     AND board.num = 2
     
+    
+    SELECT *
+		FROM `member`
+		WHERE 1
+		AND `name` = '방혜성'
+		AND email = 'banggu1997@naver.com'
