@@ -32,6 +32,7 @@
 	</script>
 	<div>
 		<form action="doPasswordCheck" method="POST" onsubmit="passwordCheckFormSubmit(this); return false;">
+			<input type="hidden" name="redirectUri" value="/usr/member/modify" />
 			
 			<div>
 				비밀번호 : <input type="password" name="loginPw"

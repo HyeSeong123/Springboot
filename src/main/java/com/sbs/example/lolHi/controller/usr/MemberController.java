@@ -232,8 +232,25 @@ public class MemberController {
 	}
 
 	@RequestMapping("/usr/member/modify")
-	public String showModify(HttpSession session, Model model) {
+	public String showModify(HttpServletRequest req, Model model, String checkLoginPwAuthCode) {
 
+		if (checkLoginPwAuthCode == null || checkLoginPwAuthCode.length() == 0) {
+			model.addAttribute("historyBack", true);
+			model.addAttribute("msg", "비밀번호 체크 인증코드가 없습니다.");
+			return "common/redirect";
+		}
+
+		int loginedMemberNum = (int) req.getAttribute("loginedMemberNum");
+
+		ResultData checkValidCheckPasswordAuthCodeResultData = memberService
+				.checkValidCheckLoginPwAuthCode(loginedMemberNum, checkLoginPwAuthCode);
+
+		if (checkValidCheckPasswordAuthCodeResultData.isFail()) {
+			model.addAttribute("historyBack" , true);
+			model.addAttribute("msg" , checkValidCheckPasswordAuthCodeResultData.getMsg());
+			
+			return "common/redirect";
+		}
 		return "usr/member/modify";
 	}
 
@@ -261,19 +278,28 @@ public class MemberController {
 	}
 
 	@RequestMapping("/usr/member/doPasswordCheck")
-	public String doPasswordCheck(Model model, HttpServletRequest req, String loginPw) {
+	public String doPasswordCheck(Model model, HttpServletRequest req, String loginPw, String redirectUri) {
 		int loginedMemberNum = (int) req.getAttribute("loginedMemberNum");
 
 		Member member = memberService.getMemberByNum(loginedMemberNum);
 
-		if(member.getLoginPw().equals(loginPw) == false) {
-			model.addAttribute("msg", "패스워드가 일치하지 않습니다.");
+		String authCode = memberService.getCheckLoginPwAuthCode(member.getNum());
+
+		if (member.getLoginPw().equals(loginPw) == false) {
 			model.addAttribute("historyBack", true);
+			model.addAttribute("msg", "패스워드가 일치하지 않습니다.");
 
 			return "common/redirect";
 		}
-		
-		model.addAttribute("replaceUri", "modify");
+
+		if (redirectUri == null || redirectUri.length() == 0) {
+			redirectUri = "/usr/home/main";
+		}
+		System.out.println("authCode= " + authCode);
+		System.out.println("redirectUri= " + redirectUri);
+		redirectUri = Util.getNewUri(redirectUri, "checkLoginPwAuthCode", authCode);
+
+		model.addAttribute("replaceUri", redirectUri);
 		
 		return "common/redirect";
 	}
