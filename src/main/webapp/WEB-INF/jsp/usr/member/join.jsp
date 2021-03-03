@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.9.0/sha256.min.js"></script>
 
 <c:set var="title" value="회원 가입" />
 
@@ -76,6 +77,10 @@
 				form.email.focus();
 				return;
 			}
+			
+			form.loginPw.value = sha256(form.loginPw.value);
+			form.loginPwConfirm.value = "";
+			
 			form.submit();
 			doJoinForm_submited = true;
 		}

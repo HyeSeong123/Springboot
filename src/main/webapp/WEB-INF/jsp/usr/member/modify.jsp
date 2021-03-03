@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.9.0/sha256.min.js"></script>
 
 <c:set var="title" value="회원 가입" />
 
@@ -54,6 +55,9 @@
 				return;
 			}
 			
+			form.loginPw.value = sha256(form.loginPw.value);
+			form.loginPwConfirm.value = "";
+			
 			form.submit();
 			doModifyForm_submited = true;
 		}
@@ -67,12 +71,12 @@
 		
 		<div>
 			비밀번호 : <input type="password" name="loginPw"
-				value="${loginedMember.loginPw}" placeholder="비밀번호를 입력해주세요" />
+				placeholder="비밀번호를 입력해주세요" />
 		</div>
 
 		<div>
 			비밀번호 확인 : <input type="password" name="loginPwConfirm"
-				value="${loginedMember.loginPw}" placeholder="비밀번호를 다시 입력해주세요" />
+				placeholder="비밀번호를 다시 입력해주세요" />
 		</div>
 
 		<div>

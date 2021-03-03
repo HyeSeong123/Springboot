@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.sbs.example.lolHi.Service.MemberService;
 import com.sbs.example.lolHi.dto.Member;
+import com.sbs.example.lolHi.dto.ResultData;
 import com.sbs.example.lolHi.util.Util;
 
 @Controller
@@ -52,22 +53,22 @@ public class MemberController {
 			return "common/redirect";
 		}
 
-		int isJoinAvailableLoginIdAndEmail = memberService.isJoinAvailableLoginIdAndEmail(loginId,email);
+		int isJoinAvailableLoginIdAndEmail = memberService.isJoinAvailableLoginIdAndEmail(loginId, email);
 
 		if (isJoinAvailableLoginIdAndEmail == -1) {
 			model.addAttribute("msg", loginId + "(은)는 이미 사용중인 아이디 입니다.");
 			model.addAttribute("replaceUri", "/usr/member/join");
-			
+
 			return "common/redirect";
 		}
-		
+
 		if (isJoinAvailableLoginIdAndEmail == -2) {
 			model.addAttribute("msg", email + "(은)는 이미 사용중인 이메일 입니다.");
 			model.addAttribute("replaceUri", "/usr/member/join");
-			
+
 			return "common/redirect";
 		}
-		
+
 		int num = memberService.join(param);
 
 		model.addAttribute("msg", loginId + "님의 회원가입을 환영합니다");
@@ -77,19 +78,19 @@ public class MemberController {
 	}
 
 	@RequestMapping("/usr/member/login")
-	public String showLogin(HttpServletRequest req, Model model,String listUrl) {
-		if(listUrl == null) {
+	public String showLogin(HttpServletRequest req, Model model, String listUrl) {
+		if (listUrl == null) {
 			listUrl = "/usr/home/main";
 		}
-		
+
 		int loginedMemberNum = (int) req.getAttribute("loginedMemberNum");
-		
-		if(listUrl != null) {
+
+		if (listUrl != null) {
 			String encodedListUrl = Util.getUriEncoded(listUrl);
 		}
-		
+
 		req.setAttribute("encodedPreUrl", listUrl);
-		
+
 		if (loginedMemberNum > 0) {
 			model.addAttribute("msg", "로그아웃 후 이용해주세요.");
 			model.addAttribute("replaceUri", "../.." + listUrl);
@@ -100,8 +101,9 @@ public class MemberController {
 	}
 
 	@RequestMapping("/usr/member/doLogin")
-	public String doLogin(String loginId, String loginPw, HttpSession session , Model model, HttpServletRequest req, String listUrl) {
-		if(listUrl == null) {
+	public String doLogin(String loginId, String loginPw, HttpSession session, Model model, HttpServletRequest req,
+			String listUrl) {
+		if (listUrl == null) {
 			listUrl = "/home/main";
 		}
 		if (loginId.length() == 0) {
@@ -110,7 +112,7 @@ public class MemberController {
 
 			return "common/redirect";
 		}
-		
+
 		if (loginPw.length() == 0) {
 			model.addAttribute("msg", "로그인 패스워드를 입력해주세요");
 			model.addAttribute("historyBack");
@@ -122,92 +124,99 @@ public class MemberController {
 
 		if (member == null) {
 			model.addAttribute("msg", "존재하지 않는 아이디 입니다.");
-			model.addAttribute("replaceUri", "./login" + listUrl);
+			model.addAttribute("replaceUri", "./login");
 
 			return "common/redirect";
 		}
 
 		if (member.getLoginPw().equals(loginPw) == false) {
 			model.addAttribute("msg", "아이디와 패스워드가 일치하지 않습니다.");
-			model.addAttribute("replaceUri", "./login" + listUrl);
+			model.addAttribute("replaceUri", "./login");
 
 			return "common/redirect";
 		}
 
 		session.setAttribute("loginedMemberNum", member.getNum());
-		
+
 		model.addAttribute("msg", member.getLoginId() + "님의 로그인을 환영합니다.");
 		model.addAttribute("replaceUri", "../.." + listUrl);
 
 		return "common/redirect";
 	}
+
 	@RequestMapping("/usr/member/findLoginId")
 	public String showFindLoginId(HttpServletRequest req, Model model) {
-		
+
 		return "usr/member/findLoginId";
 	}
+
 	@RequestMapping("/usr/member/doFindLoginId")
-	public String DoFindLoginId(Model model,@RequestParam Map<String,Object> param) {
-		
+	public String DoFindLoginId(Model model, @RequestParam Map<String, Object> param) {
+
 		Member member = memberService.getMemberByNameAndEmail(param);
 
-		if ( member == null) {
+		if (member == null) {
 			model.addAttribute("msg", "일치하는 아이디가 없습니다.");
 			model.addAttribute("replaceUri", "./findLoginId");
-			
+
 			return "common/redirect";
 		}
-		
+
 		model.addAttribute("msg", "회원님의 아이디는" + member.getLoginId() + "입니다.");
 		model.addAttribute("replaceUri", "./login");
-		
+
 		return "common/redirect";
-	}	
+	}
+
 	@RequestMapping("/usr/member/findPassword")
 	public String showFindPassword(HttpServletRequest req, Model model) {
-		
+
 		return "usr/member/findPassword";
 	}
+
 	@RequestMapping("/usr/member/doFindPassword")
-	public String DoFindPassword(Model model,String loginId, String email) {
-		
-		int canFind = memberService.canMemberByLoginIdAndEmail(loginId,email);
+	public String DoFindPassword(Model model, String loginId, String email) {
+
+		int canFind = memberService.canMemberByLoginIdAndEmail(loginId, email);
 
 		System.out.println("loginId= " + loginId);
 		System.out.println("email= " + email);
-		
-		if ( canFind == -1) {
+
+		if (canFind == -1) {
 			model.addAttribute("msg", "일치하는 아이디가 없습니다.");
 			model.addAttribute("replaceUri", "./findPassword");
-			
+
 			return "common/redirect";
 		}
-		
-		if ( canFind == -2) {
+
+		if (canFind == -2) {
 			model.addAttribute("msg", "일치하는 이메일이 없습니다.");
 			model.addAttribute("replaceUri", "./findPassword");
-			
+
 			return "common/redirect";
 		}
-		
-		if ( canFind == -3) {
+
+		if (canFind == -3) {
 			model.addAttribute("msg", "아이디와 이메일이 일치하지 않습니다.");
 			model.addAttribute("replaceUri", "./findPassword");
-			
+
 			return "common/redirect";
 		}
-		
-		Member member = memberService.getMemberByLoginIdAndEmail(loginId,email);
-		
-		memberService.setTempPasswordAndNotify(member);
-		
-		model.addAttribute("msg", "임시비밀번호를 이메일로 발송 하였습니다." + member.getLoginPw() + "입니다.");
-		model.addAttribute("replaceUri", "./login");
-		
+
+		Member member = memberService.getMemberByLoginIdAndEmail(loginId, email);
+
+		System.out.println("member=" + member);
+
+		ResultData setTempPasswordAndNotifyRsData = memberService.setTempPasswordAndNotify(member);
+
+		model.addAttribute("msg", String.format(setTempPasswordAndNotifyRsData.getMsg()));
+		model.addAttribute("historyBack", true);
+
 		return "common/redirect";
 	}
+
 	@RequestMapping("/usr/member/doLogout")
-	public String doLogout(HttpSession session, Model model,String listUrl) {
+	public String doLogout(HttpSession session, Model model, String listUrl) {
 		session.setAttribute("loginedMemberNum", 0);
 
 		model.addAttribute("msg", "로그아웃 되었습니다.");
@@ -215,32 +224,58 @@ public class MemberController {
 
 		return "common/redirect";
 	}
-	
+
 	@RequestMapping("/usr/member/showInforMe")
 	public String showInforMe(HttpSession session, Model model) {
-		
+
 		return "usr/member/showInforMe";
 	}
-	
+
 	@RequestMapping("/usr/member/modify")
 	public String showModify(HttpSession session, Model model) {
-		
+
 		return "usr/member/modify";
 	}
-	
+
 	@RequestMapping("/usr/member/doModify")
-	public String doModify(HttpSession session, Model model, @RequestParam Map<String, Object> param, HttpServletRequest req) {
+	public String doModify(HttpSession session, Model model, @RequestParam Map<String, Object> param,
+			HttpServletRequest req) {
 		int loginedMemberNum = (int) req.getAttribute("loginedMemberNum");
-		
+
 		param.put("num", loginedMemberNum);
-		
+
 		param.remove("loginId");
-		
+
 		memberService.doModify(param);
-		
+
 		model.addAttribute("msg", "수정되었습니다.");
 		model.addAttribute("replaceUri", "/usr/home/main");
 
 		return "common/redirect";
 	}
+
+	@RequestMapping("/usr/member/passwordCheck")
+	public String showpasswordCheck(HttpSession session, Model model) {
+
+		return "usr/member/passwordCheck";
+	}
+
+	@RequestMapping("/usr/member/doPasswordCheck")
+	public String doPasswordCheck(Model model, HttpServletRequest req, String loginPw) {
+		int loginedMemberNum = (int) req.getAttribute("loginedMemberNum");
+
+		Member member = memberService.getMemberByNum(loginedMemberNum);
+
+		if(member.getLoginPw().equals(loginPw) == false) {
+			model.addAttribute("msg", "패스워드가 일치하지 않습니다.");
+			model.addAttribute("historyBack", true);
+
+			return "common/redirect";
+		}
+		
+		model.addAttribute("replaceUri", "modify");
+		
+		return "common/redirect";
+	}
+
 }

@@ -13,7 +13,7 @@
 	<div>생성일자 : ${loginedMember.regDate}</div>
 	<div>별명 : ${loginedMember.nickname}</div>
 	<div>이메일 : ${loginedMember.email}</div>
-	<a href="modify">내 정보 변경</a>
+	<a href="passwordCheck">내 정보 변경</a>
 
 </div>
 <%@ include file="../part/footer.jspf"%>
