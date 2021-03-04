@@ -5,7 +5,13 @@
 <mapper namespace="com.sbs.example.lolHi.dao.ArticleDao">
 
 	<select id="getArticles" resultMap="article">
-		SELECT A.*,
+		SELECT A.num,
+        DATE_FORMAT(A.regDate, '%Y-%m-%d %H시%i분') AS regDate,
+        DATE_FORMAT(A.updateDate, '%Y-%m-%d %H시%i분') AS updateDate,
+        A.memberNum,
+        A.boardNum,
+        A.title,
+        A.body,
 		M.name AS extra__writer,
 		B.name AS extra__board,
 		IFNULL(SUM(L.point), 0) AS likePoint
@@ -22,8 +28,24 @@
 		</if>
 		
 		<if test="searchKeyword != null ">
-			AND title LIKE CONCAT('%', #{searchKeyword}, '%')
-			AND body  LIKE CONCAT('%', #{searchKeyword}, '%')
+			
+			<if test="searchKeywordType == '제목'" >
+				AND title LIKE CONCAT('%', #{searchKeyword}, '%')
+			</if>
+			
+			<if test="searchKeywordType == '내용'" >
+				AND body  LIKE CONCAT('%', #{searchKeyword}, '%')
+			</if>
+			
+			<if test="searchKeywordType == '제목과내용'" >
+				AND title LIKE CONCAT('%', #{searchKeyword}, '%')
+				AND body  LIKE CONCAT('%', #{searchKeyword}, '%')
+			</if>
+			
+			<if test="searchKeywordType == '작성일'" >
+				AND REPLACE(A.regDate, '-', '') LIKE CONCAT('%', REPLACE(#{searchKeyword}, '-' , ''), '%')
+			</if>
+			
 		</if>
 		
 		GROUP BY A.num DESC
@@ -91,7 +113,7 @@
 	<insert id="doWriteArticleByNum" useGeneratedKeys="true" keyProperty="num">
 		INSERT INTO article
 		<set>
-			regDate = NOW(),
+			regDate = NOT(),
 			updateDate = NOW(),
 			memberNum = #{memberNum},
 			title = #{title},
@@ -108,8 +130,24 @@
 		AND B.code = #{boardCode}
 		
 		<if test="searchKeyword != null ">
-			AND title LIKE CONCAT('%', #{searchKeyword}, '%')
-			AND body  LIKE CONCAT('%', #{searchKeyword}, '%')
+			
+			<if test="searchKeywordType == '제목'" >
+				AND title LIKE CONCAT('%', #{searchKeyword}, '%')
+			</if>
+			
+			<if test="searchKeywordType == '내용'" >
+				AND body  LIKE CONCAT('%', #{searchKeyword}, '%')
+			</if>
+			
+			<if test="searchKeywordType == '제목과내용'" >
+				AND title LIKE CONCAT('%', #{searchKeyword}, '%')
+				AND body  LIKE CONCAT('%', #{searchKeyword}, '%')
+			</if>
+			
+			<if test="searchKeywordType == '작성일'" >
+				AND REPLACE(A.regDate, '-', '') LIKE CONCAT('%', REPLACE(#{searchKeyword}, '-' , ''), '%')
+			</if>
+			
 		</if>
 		
 	</select>

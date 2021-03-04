@@ -67,6 +67,7 @@
 	<form action="doModify" method="POST"
 		onsubmit="modifyFormSubmit(this); return false;">
 		
+		<input type="hidden" name="checkLoginPwAuthCode" value= "${param.checkLoginPwAuthCode}" />
 		<input type="hidden" name="loginedMemberNum" value= "${loginedMemberNum}" />
 		
 		<div>

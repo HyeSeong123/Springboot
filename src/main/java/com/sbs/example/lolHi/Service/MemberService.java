@@ -19,9 +19,9 @@ public class MemberService {
 	@Value("${custom.siteName}")
 	private String siteName;
 
-	@Value("${custom.siteMainUri}")
-	private String siteMainUri;
-
+	@Value("${custom.siteUri}")
+	private String siteUrl;
+	
 	@Value("${custom.siteLoginUri}")
 	private String siteLoginUri;
 
@@ -41,17 +41,30 @@ public class MemberService {
 
 		String email = Util.getAsStr(param.get("email"), null);
 
-		sendJoinCompleteMail(email);
+		String authCode = genEmailAuthCode(num);
+		
+		sendJoinCompleteMail(num, email, authCode);
 
 		return num;
 	}
 
-	private void sendJoinCompleteMail(String email) {
-		String mailTitle = String.format("[%s] 가입이 완료되었습니다.", siteName);
+	private String genEmailAuthCode(int actorNum) {
+		
+		String authCode = UUID.randomUUID().toString();
+		attrService.setValue("member__" + actorNum + "__extra__emailAuthCode", authCode);
+
+		return authCode;
+	}
+
+	private void sendJoinCompleteMail(int actorNum, String email, String authCode) {
+		String mailTitle = String.format("[%s] 가입이 완료되었습니다. 이메일 인증을 진행해주세요", siteName);
 
 		StringBuilder mailBodySb = new StringBuilder();
+		String doAuthMainUrl = siteUrl + "/usr/member/doAuthEmail?authCode=" + authCode + "&email=" + email + "&actorNum=" + actorNum;
+		
 		mailBodySb.append("<h1>가입이 완료되었습니다.<h1>");
-		mailBodySb.append(String.format("<p><a href=\"%s\" target=\"_blank\">%s</a>로 이동</p>", siteMainUri, siteName));
+		mailBodySb.append("<h1>아래 인증코드를 클릭하여 이메일 인증을 해주세요.<h1>");
+		mailBodySb.append(String.format("<p><a href=\"%s\" target=\"_blank\">인증하기</a></p>", doAuthMainUrl));
 
 		mailService.send(email, mailTitle, mailBodySb.toString());
 	}
@@ -145,7 +158,7 @@ public class MemberService {
 		return new ResultData("S-1", "임시 패스워드를 메일로 발송하였습니다.");
 	}
 
-	public String getCheckLoginPwAuthCode(int actorNum) {
+	public String genCheckLoginPwAuthCode(int actorNum) {
 		String authCode = UUID.randomUUID().toString();
 		attrService.setValue("member__" + actorNum + "__extra__modifyPrivateAuthCode", authCode,
 				Util.getDateStrLater(60 * 60));
@@ -161,5 +174,18 @@ public class MemberService {
 		}
 
 		return new ResultData("F-1", "유효하지 않은 키 입니다.");
+	}
+
+	public String getEmailAuthCode(int actorNum) {
+		return attrService.getValue("member__" + actorNum + "__extra__emailAuthCode");
+		
+	}
+
+	public void saveAuthedEmail(int actorNum, String email) {
+		attrService.setValue("member__" + actorNum + "__extra__authedEmail", email);
+	}
+
+	public String getAuthedEmail(int actorNum) {
+		return attrService.getValue("member__" + actorNum + "__extra__authedEmail");
 	}
 }

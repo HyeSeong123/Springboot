@@ -40,6 +40,8 @@ public class ArticleController {
 	@RequestMapping("/usr/article-{boardCode}/list")
 	public String showList(Model model, @RequestParam Map<String, Object> param,@PathVariable("boardCode") String boardCode, HttpServletRequest req) {
 		
+		System.out.println("listParam= " + param);
+		
 		Board board = articleService.getBoardByCode(boardCode);
 		
 		List<Board> boards = articleService.getBoards();

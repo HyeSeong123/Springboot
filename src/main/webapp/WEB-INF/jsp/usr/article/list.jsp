@@ -72,6 +72,28 @@
 	
 	<div>
 		<form>
+			<select name="searchKeywordType" value="${param.searchKeywordType}">
+				<c:if test="${param.searchKeywordType != null }" >
+					<option value="${param.searchKeywordType}">${param.searchKeywordType}</option>
+				</c:if>
+				
+				<c:if test="${param.searchKeywordType != '제목' }" >
+					<option value="제목">제목</option>
+				</c:if>
+				
+				<c:if test="${param.searchKeywordType != '내용' }" >
+					<option value="내용">내용</option>
+				</c:if>
+				
+				<c:if test="${param.searchKeywordType != '제목&내용' }" >
+					<option value="제목과내용">제목&내용</option>
+				</c:if>
+				
+				<c:if test="${param.searchKeywordType != '작성일' }" >
+					<option value="작성일">작성일</option>
+				</c:if>
+			</select>
+			${param.searchKeywordType}
 			<input type="text"  placeholder="검색어를 입력하세요" name="searchKeyword" value="${param.searchKeyword}"/>
 			<input type="submit" value="검색"/>
 		</form>

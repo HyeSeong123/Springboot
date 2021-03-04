@@ -34,7 +34,12 @@ public class AttrService {
 
 		return setValue(relTypeCode, relNum, typeCode, type2Code, value, expireDate);
 	}
+	
+	public int setValue(String name, String value) {
+		return setValue(name, value, null);
+	}
 
+	
 	public String getValue(String name) {
 		String[] nameBits = name.split("__");
 		String relTypeCode = nameBits[0];
