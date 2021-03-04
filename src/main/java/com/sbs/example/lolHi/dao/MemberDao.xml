@@ -15,6 +15,7 @@
 			nickname = #{nickname},
 			hpNum = #{hpNum},
 			email = #{email},
+			authKey = CONCAT("authKey1__" , UUID(), "__", RAND())
 		</set>
 	</insert>
 
@@ -23,6 +24,13 @@
 		FROM `member`
 		WHERE loginId = #{loginId}
 	</select>
+
+	<select id="getMemberByAuthKey" resultType="Member">
+		SELECT *
+		FROM `member`
+		WHERE authKey = #{authKey}
+	</select>
+
 
 	<select id="getMemberByEmail" resultType="Member">
 		SELECT *

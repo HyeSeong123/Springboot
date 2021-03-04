@@ -188,4 +188,8 @@ public class MemberService {
 	public String getAuthedEmail(int actorNum) {
 		return attrService.getValue("member__" + actorNum + "__extra__authedEmail");
 	}
+
+	public Member getMemberByAuthKey(String authKey) {
+		return memberDao.getMemberByAuthKey(authKey);
+	}
 }

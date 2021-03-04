@@ -27,28 +27,47 @@ public class BeforeActionInterceptor implements HandlerInterceptor {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-		HttpSession session = request.getSession();
-
-		boolean isAjax = false;
-		boolean isLogined = false;
 		int loginedMemberNum = 0;
 		Member loginedMember = null;
-
-		if (session.getAttribute("loginedMemberNum") != null) {
-			loginedMemberNum = (int) session.getAttribute("loginedMemberNum");
-
-			if (loginedMemberNum > 0) {
-				isLogined = true;
+		
+		String authKey = request.getParameter("authKey");
+		if(authKey != null && authKey.length() > 0) {
+			loginedMember = memberService.getMemberByAuthKey(authKey);
+			
+			if(loginedMember == null) {
+				request.setAttribute("authKeyStatus", "invalid");
 			}
-			loginedMember = memberService.getMemberByNum(loginedMemberNum);
+			else {
+				request.setAttribute("authKeyStatus", "valid");
+				loginedMemberNum = loginedMember.getNum();
+			}
 		}
-
-		if (session.getAttribute("listUrl") != null) {
-			String listUrl = request.getParameter("listUrl");
-
-			request.setAttribute("listUrl", listUrl);
+		else {
+			HttpSession session = request.getSession();
+			request.setAttribute("authKeyStatus", "none");
+			
+			if(session.getAttribute("loginedMemberNum") != null) {
+				loginedMemberNum = (int)session.getAttribute("loginedMemberNum");
+				loginedMember = memberService.getMemberByNum(loginedMemberNum);
+			}
 		}
+		
+		boolean isAjax = false;
+		boolean isLogined = false;
 
+		if(loginedMember != null) {
+			if (loginedMember != null) {
+				isLogined = true;
+				loginedMember = memberService.getMemberByNum(loginedMemberNum);
+			}
+			HttpSession session = request.getSession();
+			
+			if (session.getAttribute("listUrl") != null) {
+				String listUrl = request.getParameter("listUrl");
+	
+				request.setAttribute("listUrl", listUrl);
+			}
+		}
 		
 		List<Board> boards = articleService.getBoards();
 		

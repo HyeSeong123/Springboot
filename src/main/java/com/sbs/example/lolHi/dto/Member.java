@@ -15,5 +15,6 @@ public class Member {
 	private String hpNum;
 	private String loginId;
 	private String loginPw;
+	private String authKey;
 	private int adminLevel;
 }

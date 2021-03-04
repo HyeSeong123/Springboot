@@ -45,11 +45,18 @@ CREATE TABLE `member`(
 
 ALTER TABLE `member` ADD COLUMN hpNum CHAR(15) NOT NULL AFTER email
 
+# APIkey
+ALTER TABLE `member` CHANGE COLUMN authKey CHAR(80)
+
+UPDATE `member`
+SET authKey = CONCAT("authKey1__" , UUID(), "__", RAND())
+WHERE authKey=''
+
 UPDATE `member`
 SET hpNum = '010-2010-2020'
 WHERE hpNum = ''
 # 멤버 번호 재지정
-ALTER TABLE `member` AUTO_INCREMENT = 2;
+ALTER TABLE `member` AUTO_INCREMENT = 1;
 # 멤버 패스워드 암호화
 UPDATE `member`
 SET loginPw = SHA2(loginPw, 256);
@@ -157,9 +164,56 @@ SELECT COUNT(*)
     ON article.boardNum = board.num
     AND board.num = 2
     
-    
-    SELECT *
-		FROM `member`
+SELECT *
+    FROM `member`
+    WHERE 1
+    AND `name` = '방혜성'
+    AND email = 'banggu1997@naver.com'
+
+UPDATE `member`
+SET authKey = 'authKey1__066f8df0-7cb3-11eb-bc64-b025aa3ecfdd__0.532693481568893' 
+WHERE num=1
+
+UPDATE `member`
+SET authKey = 'authKey1__066f900e-7cb3-11eb-bc64-b025aa3ecfdd__0.809797994615322' 
+WHERE num=2
+
+UPDATE `member`
+SET authKey = 'authKey1__ecacb00e-7cb7-11eb-bc64-b025aa3ecfdd__0.6244505845237994' 
+WHERE num=3
+
+SELECT DATE_FORMAT(A.regDate, '%Y-%m-%d %H:%i') AS regDate FROM article AS A
+
+SELECT A.num,
+        DATE_FORMAT(A.regDate, '%Y-%m-%d %H시%i분') AS regDate,
+        DATE_FORMAT(A.updateDate, '%Y-%m-%d %H시%i분') AS updateDate,
+        A.memberNum,
+        A.boardNum,
+        A.title,
+        A.body,
+		M.name AS extra__writer,
+		B.name AS extra__board,
+		IFNULL(SUM(L.point), 0) AS likePoint
+		FROM article AS A
+		INNER JOIN MEMBER AS M
+		ON A.memberNum = M.num
+		INNER JOIN board AS B
+		ON A.boardNum = B.num
+		LEFT JOIN `like` AS L
+		ON A.num = L.relNum
 		WHERE 1
-		AND `name` = '방혜성'
-		AND email = 'banggu1997@naver.com'
+		AND B.code = 'free'
+		AND REPLACE(A.regDate, '-', '') LIKE CONCAT('%', REPLACE('202103', '-', '') , '%')
+
+GROUP BY A.num DESC
+
+INSERT INTO `member`
+		 SET regDate = NOW(),
+			updateDate = NOW(),
+			loginId = 'test6',
+			loginPw = '0ffe1abd1a08215353c233d6e009613e95eec4253832a761af28ff37ac5a150c',
+			`name` = '방혜성',
+			nickname = 'baobab0612',
+			hpNum = '010-8370-0420',
+			email = 'baobab0612@naver.com',
+			authKey = CONCAT("authKey1__" , UUID(), "__", RADN())
