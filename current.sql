@@ -80,12 +80,18 @@ CREATE TABLE `attr` (
   PRIMARY KEY (`num`),
   UNIQUE KEY `relTypeCode` (`relTypeCode`,`relNum`,`typeCode`,`type2Code`),
   KEY `relTypeCode_2` (`relTypeCode`,`typeCode`,`type2Code`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `attr` */
 
 insert  into `attr`(`num`,`regDate`,`updateDate`,`relTypeCode`,`relNum`,`typeCode`,`type2Code`,`value`,`expireDate`) values 
-(1,'2021-03-03 17:36:25','2021-03-03 17:36:45','member',1,'extra','modifyPrivateAuthCode','31cf0f50-d2a5-4502-a2ee-c0e9412af9d6','2021-03-03 18:36:45');
+(12,'2021-03-04 10:19:33','2021-03-04 10:19:33','member',10,'extra','emailAuthCode','034b551e-bacf-4634-b5b7-e89093c000f5',NULL),
+(13,'2021-03-04 10:19:55','2021-03-04 10:22:57','member',10,'extra','authedEmail','banggu1997@gmail.com',NULL),
+(16,'2021-03-04 10:35:44','2021-03-04 10:35:44','member',1,'extra','emailAuthCode','7ec6624c-2928-48f8-99a1-fae382c561a6',NULL),
+(17,'2021-03-04 10:35:55','2021-03-04 10:35:55','member',1,'extra','authedEmail','banggu1997@gmail.com',NULL),
+(18,'2021-03-04 10:38:38','2021-03-04 10:38:38','member',2,'extra','emailAuthCode','32c03fed-e1eb-4bc0-9e31-3e388654607d',NULL),
+(19,'2021-03-04 10:39:15','2021-03-04 10:39:15','member',2,'extra','authedEmail','banggu1997@naver.com',NULL),
+(20,'2021-03-04 16:04:55','2021-03-04 16:04:55','member',3,'extra','emailAuthCode','dacae386-d941-4375-a9c9-bb2ab4dfcb9d',NULL);
 
 /*Table structure for table `board` */
 
@@ -143,17 +149,19 @@ CREATE TABLE `member` (
   `hpNum` char(15) NOT NULL,
   `loginId` char(50) NOT NULL,
   `loginPw` varchar(200) NOT NULL,
+  `authKey` char(80) NOT NULL,
   `adminLevel` tinyint(1) unsigned NOT NULL DEFAULT 2 COMMENT '0=탈퇴/1=로그인정지/2=일반/3=인증된,4=관리자',
-  PRIMARY KEY (`num`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4;
+  PRIMARY KEY (`num`),
+  UNIQUE KEY `loginId` (`loginId`),
+  UNIQUE KEY `authKey` (`authKey`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `member` */
 
-insert  into `member`(`num`,`regDate`,`updateDate`,`name`,`nickname`,`email`,`hpNum`,`loginId`,`loginPw`,`adminLevel`) values 
-(1,'2021-02-19 22:35:19','2021-03-03 17:33:46','가나다라11','banggu1997','banggu1997@gmail.com','010-2010-2020','test','e0f8aece47e9bfb35bb8c9f09efb3ac062174eefd68b8c11a1b760c8291eb794',2),
-(2,'2021-02-20 13:14:12','2021-03-02 16:14:50','방혜성','방혜성','bmg4211@naver.com','010-2010-2020','baobab612','0ffe1abd1a08215353c233d6e009613e95eec4253832a761af28ff37ac5a150c',10),
-(3,'2021-03-02 17:41:59','2021-03-02 17:41:59','방혜성','bababam','banggu1997@naver.com','010-2010-2020','test2','0ffe1abd1a08215353c233d6e009613e95eec4253832a761af28ff37ac5a150c',2),
-(6,'2021-03-03 11:40:47','2021-03-03 11:40:47','방혜성','baobab612','baobab0612@naver.com','010-8370-0420','emailTest','0ffe1abd1a08215353c233d6e009613e95eec4253832a761af28ff37ac5a150c',2);
+insert  into `member`(`num`,`regDate`,`updateDate`,`name`,`nickname`,`email`,`hpNum`,`loginId`,`loginPw`,`authKey`,`adminLevel`) values 
+(1,'2021-03-04 10:35:44','2021-03-04 10:35:44','방혜성','baobab612','banggu1997@gmail.com','010-8370-0420','test','0ffe1abd1a08215353c233d6e009613e95eec4253832a761af28ff37ac5a150c','authKey1__066f8df0-7cb3-11eb-bc64-b025aa3ecfdd__0.532693481568893',2),
+(2,'2021-03-04 10:38:38','2021-03-04 10:38:38','방혜성','baobab612','banggu1997@naver.com','010-8370-0420','baobab612','0ffe1abd1a08215353c233d6e009613e95eec4253832a761af28ff37ac5a150c','authKey1__066f900e-7cb3-11eb-bc64-b025aa3ecfdd__0.809797994615322',2),
+(3,'2021-03-04 16:04:55','2021-03-04 16:04:55','방혜성','baobab0612','baobab0612@naver.com','010-8370-0420','test6','0ffe1abd1a08215353c233d6e009613e95eec4253832a761af28ff37ac5a150c','authKey1__ecacb00e-7cb7-11eb-bc64-b025aa3ecfdd__0.6244505845237994',2);
 
 /*Table structure for table `reply` */
 
