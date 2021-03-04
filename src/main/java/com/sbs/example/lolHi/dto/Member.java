@@ -1,5 +1,7 @@
 package com.sbs.example.lolHi.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -14,7 +16,9 @@ public class Member {
 	private String email;
 	private String hpNum;
 	private String loginId;
+	@JsonIgnore
 	private String loginPw;
+	@JsonIgnore
 	private String authKey;
 	private int adminLevel;
 }

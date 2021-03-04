@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sbs.example.lolHi.Service.MemberService;
 import com.sbs.example.lolHi.dto.Member;
@@ -153,6 +154,45 @@ public class MemberController {
 		return "common/redirect";
 	}
 
+	@RequestMapping("/usr/member/authKey")
+	@ResponseBody
+	public ResultData showAuthKey(String loginId, String loginPw) {
+		
+		if(loginId == null) {
+			return new ResultData("F-1", "loginId를 입력해주세요");
+		}
+		
+		Member existingMember = memberService.getMemberByLoginId(loginId);
+		
+		if(existingMember == null) {
+			return new ResultData("F-2", "존재하지 않는 아이디 입니다.", "loginId", loginId);
+		}
+		
+		if(loginPw == null) {
+			return new ResultData("F-1", "패스워드를 입력해주세요.");
+		}
+		
+		if(existingMember.getLoginPw().equals(loginPw) == false) {
+			return new ResultData("F-3", "비밀번호가 일치하지 않습니다.");
+		}
+		
+		return new ResultData("S-1", String.format("%s님 환영합니다,", existingMember.getNickname()), "authKey", existingMember.getAuthKey(), "num", existingMember.getNum(), "name", existingMember.getName(), "nickname", existingMember.getNickname());
+	}
+
+	@RequestMapping("/usr/member/memberByAuthKey")
+	@ResponseBody
+	public ResultData showMemberByAuthKey(String authKey) {
+		if (authKey == null) {
+			return new ResultData("F-1", "authKey를 입력해주세요.");
+		}
+		
+		Member existingMember = memberService.getMemberByAuthKey(authKey);
+		
+		return new ResultData("S-1", String.format("유효한 회원입니다."), "member" , existingMember);
+		
+	}
+
+	
 	@RequestMapping("/usr/member/findLoginId")
 	public String showFindLoginId(HttpServletRequest req, Model model) {
 
